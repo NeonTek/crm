@@ -1,0 +1,39 @@
+import type React from "react"
+import type { Metadata } from "next"
+import { GeistSans } from "geist/font/sans"
+import { GeistMono } from "geist/font/mono"
+import { Analytics } from "@vercel/analytics/next"
+import { ThemeProvider } from "@/components/theme-provider"
+import { AuthProvider } from "@/lib/auth-context"
+import { AuthWrapper } from "@/components/auth/auth-wrapper"
+import { Toaster } from "@/components/ui/sonner"
+import { Suspense } from "react"
+import "./globals.css"
+
+export const metadata: Metadata = {
+  title: "Neontek CRM - Client Relationship Management",
+  description: "Professional CRM application for Neontek Digital Agency",
+  generator: "Neontek CRM",
+}
+
+export default function RootLayout({
+  children,
+}: Readonly<{
+  children: React.ReactNode
+}>) {
+  return (
+    <html lang="en" suppressHydrationWarning>
+      <body className={`font-sans ${GeistSans.variable} ${GeistMono.variable}`}>
+        <ThemeProvider attribute="class" defaultTheme="dark" enableSystem disableTransitionOnChange>
+          <AuthProvider>
+            <Suspense fallback={<div>Loading...</div>}>
+              <AuthWrapper>{children}</AuthWrapper>
+              <Toaster />
+            </Suspense>
+          </AuthProvider>
+        </ThemeProvider>
+        <Analytics />
+      </body>
+    </html>
+  )
+}
