@@ -1,19 +1,25 @@
-"use client"
+"use client";
 
-import type React from "react"
+import type React from "react";
 
-import { useState } from "react"
-import { useForm, Controller } from "react-hook-form"
-import { zodResolver } from "@hookform/resolvers/zod"
-import { z } from "zod"
-import { Button } from "@/components/ui/button"
-import { Input } from "@/components/ui/input"
-import { Label } from "@/components/ui/label"
-import { Textarea } from "@/components/ui/textarea"
-import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogTrigger } from "@/components/ui/dialog"
-import { Plus, Loader2 } from "lucide-react"
-import { toast } from "sonner"
-import type { IClient } from "@/models/Client"
+import { useState } from "react";
+import { useForm, Controller } from "react-hook-form";
+import { zodResolver } from "@hookform/resolvers/zod";
+import { z } from "zod";
+import { Button } from "@/components/ui/button";
+import { Input } from "@/components/ui/input";
+import { Label } from "@/components/ui/label";
+import { Textarea } from "@/components/ui/textarea";
+import {
+  Dialog,
+  DialogContent,
+  DialogHeader,
+  DialogTitle,
+  DialogTrigger,
+} from "@/components/ui/dialog";
+import { Plus, Loader2 } from "lucide-react";
+import { toast } from "sonner";
+import type { IClient } from "@/models/Client";
 
 const clientSchema = z.object({
   name: z.string().min(1, "Client name is required").trim(),
@@ -21,19 +27,19 @@ const clientSchema = z.object({
   email: z.string().email("Invalid email address").trim(),
   phone: z.string().min(1, "Phone number is required").trim(),
   address: z.string().min(1, "Address is required").trim(),
-})
+});
 
-type ClientFormData = z.infer<typeof clientSchema>
+type ClientFormData = z.infer<typeof clientSchema>;
 
 interface ClientFormProps {
-  client?: IClient
-  onSuccess: () => void
-  trigger?: React.ReactNode
+  client?: IClient;
+  onSuccess: () => void;
+  trigger?: React.ReactNode;
 }
 
 export function ClientForm({ client, onSuccess, trigger }: ClientFormProps) {
-  const [open, setOpen] = useState(false)
-  const [loading, setLoading] = useState(false)
+  const [open, setOpen] = useState(false);
+  const [loading, setLoading] = useState(false);
 
   const {
     control,
@@ -58,44 +64,46 @@ export function ClientForm({ client, onSuccess, trigger }: ClientFormProps) {
           phone: "",
           address: "",
         },
-  })
+  });
 
   const onSubmit = async (data: ClientFormData) => {
-    console.log("[v0] Client form submission:", data)
-    setLoading(true)
+    console.log("Client form submission:", data);
+    setLoading(true);
     try {
-      const url = client ? `/api/clients/${client._id}` : "/api/clients"
-      const method = client ? "PUT" : "POST"
+      const url = client ? `/api/clients/${client._id}` : "/api/clients";
+      const method = client ? "PUT" : "POST";
 
       const response = await fetch(url, {
         method,
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify(data),
-      })
+      });
 
       if (!response.ok) {
-        const error = await response.json()
-        throw new Error(error.error || "Failed to save client")
+        const error = await response.json();
+        throw new Error(error.error || "Failed to save client");
       }
 
-      toast.success(client ? "Client updated successfully" : "Client created successfully")
-      setOpen(false)
-      reset()
-      onSuccess()
+      toast.success(
+        client ? "Client updated successfully" : "Client created successfully"
+      );
+      setOpen(false);
+      reset();
+      onSuccess();
     } catch (error: any) {
-      console.error("[v0] Client form error:", error)
-      toast.error(error.message)
+      console.error("Client form error:", error);
+      toast.error(error.message);
     } finally {
-      setLoading(false)
+      setLoading(false);
     }
-  }
+  };
 
   const defaultTrigger = (
     <Button className="gap-2">
       <Plus className="h-4 w-4" />
       Add Client
     </Button>
-  )
+  );
 
   return (
     <Dialog open={open} onOpenChange={setOpen}>
@@ -119,7 +127,9 @@ export function ClientForm({ client, onSuccess, trigger }: ClientFormProps) {
                 />
               )}
             />
-            {errors.name && <p className="text-sm text-destructive">{errors.name.message}</p>}
+            {errors.name && (
+              <p className="text-sm text-destructive">{errors.name.message}</p>
+            )}
           </div>
 
           <div className="space-y-2">
@@ -136,7 +146,11 @@ export function ClientForm({ client, onSuccess, trigger }: ClientFormProps) {
                 />
               )}
             />
-            {errors.contactPerson && <p className="text-sm text-destructive">{errors.contactPerson.message}</p>}
+            {errors.contactPerson && (
+              <p className="text-sm text-destructive">
+                {errors.contactPerson.message}
+              </p>
+            )}
           </div>
 
           <div className="space-y-2">
@@ -154,7 +168,9 @@ export function ClientForm({ client, onSuccess, trigger }: ClientFormProps) {
                 />
               )}
             />
-            {errors.email && <p className="text-sm text-destructive">{errors.email.message}</p>}
+            {errors.email && (
+              <p className="text-sm text-destructive">{errors.email.message}</p>
+            )}
           </div>
 
           <div className="space-y-2">
@@ -171,7 +187,9 @@ export function ClientForm({ client, onSuccess, trigger }: ClientFormProps) {
                 />
               )}
             />
-            {errors.phone && <p className="text-sm text-destructive">{errors.phone.message}</p>}
+            {errors.phone && (
+              <p className="text-sm text-destructive">{errors.phone.message}</p>
+            )}
           </div>
 
           <div className="space-y-2">
@@ -189,11 +207,19 @@ export function ClientForm({ client, onSuccess, trigger }: ClientFormProps) {
                 />
               )}
             />
-            {errors.address && <p className="text-sm text-destructive">{errors.address.message}</p>}
+            {errors.address && (
+              <p className="text-sm text-destructive">
+                {errors.address.message}
+              </p>
+            )}
           </div>
 
           <div className="flex justify-end space-x-2 pt-4">
-            <Button type="button" variant="outline" onClick={() => setOpen(false)}>
+            <Button
+              type="button"
+              variant="outline"
+              onClick={() => setOpen(false)}
+            >
               Cancel
             </Button>
             <Button type="submit" disabled={loading}>
@@ -204,5 +230,5 @@ export function ClientForm({ client, onSuccess, trigger }: ClientFormProps) {
         </form>
       </DialogContent>
     </Dialog>
-  )
+  );
 }

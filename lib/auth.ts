@@ -19,10 +19,10 @@ export function generateToken(user: IUser): string {
       role: user.role,
     }
 
-    console.log("[v0] Generating token for user:", user.email)
+    console.log("Generating token for user:", user.email)
     return jwt.sign(payload, JWT_SECRET, { expiresIn: "7d" })
   } catch (error) {
-    console.error("[v0] Token generation error:", error)
+    console.error("Token generation error:", error)
     throw error
   }
 }
@@ -31,7 +31,7 @@ export function verifyToken(token: string): JWTPayload | null {
   try {
     return jwt.verify(token, JWT_SECRET) as JWTPayload
   } catch (error) {
-    console.error("[v0] Token verification error:", error)
+    console.error("Token verification error:", error)
     return null
   }
 }

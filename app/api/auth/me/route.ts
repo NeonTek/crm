@@ -1,32 +1,38 @@
-import { type NextRequest, NextResponse } from "next/server"
-import dbConnect from "@/lib/dbConnect"
-import User from "@/models/User"
-import { getTokenFromRequest, verifyToken } from "@/lib/auth"
+import { type NextRequest, NextResponse } from "next/server";
+import dbConnect from "@/lib/dbConnect";
+import User from "@/models/User";
+import { getTokenFromRequest, verifyToken } from "@/lib/auth";
 
 export async function GET(request: NextRequest) {
   try {
-    console.log("[v0] Me API: Getting current user")
-    await dbConnect()
+    console.log("Me API: Getting current user");
+    await dbConnect();
 
     // Get token from request
-    const token = getTokenFromRequest(request)
+    const token = getTokenFromRequest(request);
     if (!token) {
-      return NextResponse.json({ error: "No authentication token provided" }, { status: 401 })
+      return NextResponse.json(
+        { error: "No authentication token provided" },
+        { status: 401 }
+      );
     }
 
     // Verify token
-    const payload = verifyToken(token)
+    const payload = verifyToken(token);
     if (!payload) {
-      return NextResponse.json({ error: "Invalid or expired token" }, { status: 401 })
+      return NextResponse.json(
+        { error: "Invalid or expired token" },
+        { status: 401 }
+      );
     }
 
     // Get user from database
-    const user = await User.findById(payload.userId).select("-password")
+    const user = await User.findById(payload.userId).select("-password");
     if (!user) {
-      return NextResponse.json({ error: "User not found" }, { status: 404 })
+      return NextResponse.json({ error: "User not found" }, { status: 404 });
     }
 
-    console.log("[v0] Current user retrieved:", user.email)
+    console.log("Current user retrieved:", user.email);
 
     return NextResponse.json({
       user: {
@@ -35,9 +41,12 @@ export async function GET(request: NextRequest) {
         email: user.email,
         role: user.role,
       },
-    })
+    });
   } catch (error: any) {
-    console.error("[v0] Me API error:", error)
-    return NextResponse.json({ error: "Failed to get user information" }, { status: 500 })
+    console.error("Me API error:", error);
+    return NextResponse.json(
+      { error: "Failed to get user information" },
+      { status: 500 }
+    );
   }
 }

@@ -1,12 +1,12 @@
-import { NextResponse } from "next/server"
+import { NextResponse } from "next/server";
 
 export async function POST() {
   try {
-    console.log("[v0] Logout API: Logging out user")
+    console.log("Logout API: Logging out user");
 
     const response = NextResponse.json({
       message: "Logout successful",
-    })
+    });
 
     // Clear the authentication cookie
     response.cookies.set("token", "", {
@@ -14,11 +14,11 @@ export async function POST() {
       secure: process.env.NODE_ENV === "production",
       sameSite: "lax",
       maxAge: 0, // Expire immediately
-    })
+    });
 
-    return response
+    return response;
   } catch (error: any) {
-    console.error("[v0] Logout error:", error)
-    return NextResponse.json({ error: "Logout failed" }, { status: 500 })
+    console.error("Logout error:", error);
+    return NextResponse.json({ error: "Logout failed" }, { status: 500 });
   }
 }

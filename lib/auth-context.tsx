@@ -28,7 +28,7 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
 
   const refreshUser = async () => {
     try {
-      console.log("[v0] Refreshing user session...")
+      console.log("Refreshing user session...")
       const response = await fetch("/api/auth/me", {
         credentials: "include",
         headers: {
@@ -36,18 +36,18 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
         },
       })
 
-      console.log("[v0] Refresh response status:", response.status)
+      console.log("Refresh response status:", response.status)
 
       if (response.ok) {
         const data = await response.json()
-        console.log("[v0] User data received:", data)
+        console.log("User data received:", data)
         setUser(data.user)
       } else {
-        console.log("[v0] No valid session found")
+        console.log("No valid session found")
         setUser(null)
       }
     } catch (error) {
-      console.error("[v0] Error refreshing user:", error)
+      console.error("Error refreshing user:", error)
       setUser(null)
     } finally {
       setLoading(false)
@@ -56,7 +56,7 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
 
   const login = async (email: string, password: string) => {
     try {
-      console.log("[v0] Attempting login for:", email)
+      console.log("Attempting login for:", email)
       const response = await fetch("/api/auth/login", {
         method: "POST",
         credentials: "include",
@@ -64,13 +64,13 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
         body: JSON.stringify({ email, password }),
       })
 
-      console.log("[v0] Login response status:", response.status)
+      console.log("Login response status:", response.status)
 
       let data
       try {
         data = await response.json()
       } catch (parseError) {
-        console.error("[v0] Failed to parse login response as JSON:", parseError)
+        console.error("Failed to parse login response as JSON:", parseError)
         throw new Error("Server error - please try again later")
       }
 
@@ -82,7 +82,7 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
       toast.success("Login successful")
       window.location.href = "/"
     } catch (error: any) {
-      console.error("[v0] Login error:", error)
+      console.error("Login error:", error)
       toast.error(error.message || "Login failed")
       throw error
     }
@@ -90,7 +90,7 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
 
   const register = async (name: string, email: string, password: string) => {
     try {
-      console.log("[v0] Attempting registration for:", email)
+      console.log("Attempting registration for:", email)
       const response = await fetch("/api/auth/register", {
         method: "POST",
         credentials: "include",
@@ -98,13 +98,13 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
         body: JSON.stringify({ name, email, password }),
       })
 
-      console.log("[v0] Registration response status:", response.status)
+      console.log("Registration response status:", response.status)
 
       let data
       try {
         data = await response.json()
       } catch (parseError) {
-        console.error("[v0] Failed to parse registration response as JSON:", parseError)
+        console.error("Failed to parse registration response as JSON:", parseError)
         throw new Error("Server error - please try again later")
       }
 
@@ -116,7 +116,7 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
       toast.success("Registration successful")
       window.location.href = "/"
     } catch (error: any) {
-      console.error("[v0] Registration error:", error)
+      console.error("Registration error:", error)
       toast.error(error.message || "Registration failed")
       throw error
     }
@@ -131,7 +131,7 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
       setUser(null)
       toast.success("Logged out successfully")
     } catch (error) {
-      console.error("[v0] Logout error:", error)
+      console.error("Logout error:", error)
       toast.error("Logout failed")
     }
   }
