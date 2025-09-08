@@ -57,6 +57,8 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
     }
   };
 
+  // in auth-context.tsx
+
   const login = async (email: string, password: string) => {
     try {
       console.log("Attempting login for:", email);
@@ -83,7 +85,9 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
 
       setUser(data.user);
       toast.success("Login successful");
-      router.push("/");
+
+      // ⬇️ remove router.push("/") from here
+      return data.user; // return user so the caller can act on success
     } catch (error: any) {
       console.error("Login error:", error);
       toast.error(error.message || "Login failed");
