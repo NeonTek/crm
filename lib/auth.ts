@@ -30,7 +30,6 @@ export function isAuthenticated(): boolean {
   return getUser() !== null
 }
 
-// Demo credentials for testing
 export const DEMO_CREDENTIALS = {
   email: "admin@neontek.co.ke",
   password: "admin123",
