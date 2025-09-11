@@ -9,8 +9,7 @@ import "./globals.css"
 
 export const metadata: Metadata = {
   title: "NeonTek | CRM",
-  description: "Professional CRM system for managing clients, projects, and tasks",
-  generator: "v0.app",
+  description: "Professional CRM system for managing clients, projects, and tasks"
 }
 
 export default function RootLayout({
