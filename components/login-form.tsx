@@ -54,7 +54,7 @@ export function LoginForm() {
               <Input
                 id="email"
                 type="email"
-                placeholder="admin@neontek.co.ke"
+                placeholder="email@domain.com"
                 value={email}
                 onChange={(e) => setEmail(e.target.value)}
                 required
@@ -93,12 +93,6 @@ export function LoginForm() {
               {isLoading ? "Signing in..." : "Sign In"}
             </Button>
           </form>
-
-          <div className="mt-4 p-3 bg-muted rounded-lg">
-            <p className="text-sm text-muted-foreground mb-2">Demo Credentials:</p>
-            <p className="text-xs font-mono">Email: admin@neontek.co.ke</p>
-            <p className="text-xs font-mono">Password: admin123</p>
-          </div>
         </CardContent>
       </Card>
     </div>

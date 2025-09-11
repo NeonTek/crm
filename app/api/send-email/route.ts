@@ -18,7 +18,7 @@ export async function POST(request: NextRequest) {
       secure: true,
       auth: {
         user: process.env.EMAIL_USER || "no-reply@neontek.co.ke",
-        pass: process.env.EMAIL_PASS || "_?V8DU7A?qk{Y;Sf",
+        pass: process.env.EMAIL_PASS || "",
       },
       tls: {
         rejectUnauthorized: false,

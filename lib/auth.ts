@@ -1,12 +1,9 @@
-// Simple authentication utilities for NeonTek CRM
 export interface User {
   id: string
   email: string
   name: string
 }
 
-// Simple session management using localStorage for demo purposes
-// In production, use proper JWT tokens and secure storage
 export const AUTH_KEY = "neontek_crm_user"
 
 export function setUser(user: User) {
