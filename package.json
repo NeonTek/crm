@@ -1,5 +1,5 @@
 {
-  "name": "my-v0-project",
+  "name": "crm",
   "version": "0.1.0",
   "private": true,
   "scripts": {
@@ -73,7 +73,8 @@
     "vaul": "^0.9.9",
     "vue": "latest",
     "vue-router": "latest",
-    "zod": "3.25.67"
+    "zod": "3.25.67",
+    "nodemailer": "^6.9.15"
   },
   "devDependencies": {
     "@tailwindcss/postcss": "^4.1.9",

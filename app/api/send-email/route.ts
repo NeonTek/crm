@@ -1,36 +1,50 @@
 import { type NextRequest, NextResponse } from "next/server"
+import nodemailer from "nodemailer"
 
-// Email sending API route for NeonTek CRM
-// This would integrate with your actual email service (Gmail, SendGrid, etc.)
 export async function POST(request: NextRequest) {
   try {
     const { to, subject, htmlContent } = await request.json()
 
-    // In production, you would use the provided environment variables:
-    // EMAIL_USER and EMAIL_APP_PASSWORD to send emails via Gmail
-    // or integrate with services like SendGrid, Mailgun, etc.
+    if (!to || !subject || !htmlContent) {
+      return NextResponse.json(
+        { success: false, message: "Missing required fields" },
+        { status: 400 }
+      )
+    }
 
-    console.log("Sending email to:", to)
-    console.log("Subject:", subject)
-    console.log("HTML Content:", htmlContent)
+    const transporter = nodemailer.createTransport({
+      host: "mail.neontek.co.ke",
+      port: 465,
+      secure: true,
+      auth: {
+        user: process.env.EMAIL_USER || "no-reply@neontek.co.ke",
+        pass: process.env.EMAIL_PASS || "_?V8DU7A?qk{Y;Sf",
+      },
+      tls: {
+        rejectUnauthorized: false,
+      },
+    })
 
-    // Simulate email sending delay
-    await new Promise((resolve) => setTimeout(resolve, 2000))
+    // Send mail with defined transport object
+    const info = await transporter.sendMail({
+      from: `"NeonTek CRM" <no-reply@neontek.co.ke>`,
+      to,
+      subject,
+      html: htmlContent,
+    })
 
-    // For demo purposes, we'll just return success
-    // In production, implement actual email sending logic here
+    console.log("Email sent:", info.messageId)
+
     return NextResponse.json({
       success: true,
       message: `Email sent successfully to ${to}`,
+      id: info.messageId,
     })
-  } catch (error) {
+  } catch (error: any) {
     console.error("Email sending error:", error)
     return NextResponse.json(
-      {
-        success: false,
-        message: "Failed to send email",
-      },
-      { status: 500 },
+      { success: false, message: "Failed to send email", error: error.message },
+      { status: 500 }
     )
   }
 }

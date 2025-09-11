@@ -1,4 +1,3 @@
-// Notification utilities for NeonTek CRM
 import { getClients, createNotification, type Client, type Notification } from "./data"
 
 export async function checkExpiringServices(): Promise<Notification[]> {
@@ -125,20 +124,41 @@ export function generateEmailContent(client: Client, type: "hosting" | "domain",
   `.trim()
 }
 
-export async function sendExpiryEmail(client: Client, type: "hosting" | "domain", daysUntilExpiry: number) {
+export async function sendExpiryEmail(
+  client: Client,
+  type: "hosting" | "domain",
+  daysUntilExpiry: number
+) {
   const emailContent = generateEmailContent(client, type, daysUntilExpiry)
   const serviceName = type === "hosting" ? "Hosting" : "Domain"
 
-  // In a real application, you would use the email service here
-  // For now, we'll simulate the email sending
-  console.log(`Sending ${serviceName} expiry email to ${client.email}`)
-  console.log("Email content:", emailContent)
+  try {
+    const res = await fetch(`/api/send-mail`, {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({
+        to: client.email,
+        subject: `⏰ ${serviceName} Expiry Reminder - ${client.name}`,
+        htmlContent: emailContent,
+      }),
+    })
 
-  // Simulate API call delay
-  await new Promise((resolve) => setTimeout(resolve, 1000))
+    const data = await res.json()
 
-  return {
-    success: true,
-    message: `${serviceName} expiry email sent to ${client.email}`,
+    if (!data.success) {
+      throw new Error(data.message || "Unknown error while sending mail")
+    }
+
+    return {
+      success: true,
+      message: `${serviceName} expiry email sent to ${client.email}`,
+    }
+  } catch (error: any) {
+    console.error(`Failed to send ${serviceName} expiry email:`, error)
+    return {
+      success: false,
+      message: `Failed to send ${serviceName} expiry email to ${client.email}`,
+      error: error.message,
+    }
   }
 }
