@@ -1,61 +1,45 @@
-import jwt from "jsonwebtoken"
-import type { IUser } from "@/models/User"
-
-const JWT_SECRET = process.env.JWT_SECRET || "neontek-crm-super-secret-jwt-key-2024-production"
-
-export interface JWTPayload {
-  userId: string
+// Simple authentication utilities for NeonTek CRM
+export interface User {
+  id: string
   email: string
   name: string
-  role: string
 }
 
-export function generateToken(user: IUser): string {
-  try {
-    const payload: JWTPayload = {
-      userId: user._id.toString(),
-      email: user.email,
-      name: user.name,
-      role: user.role,
-    }
+// Simple session management using localStorage for demo purposes
+// In production, use proper JWT tokens and secure storage
+export const AUTH_KEY = "neontek_crm_user"
 
-    console.log("Generating token for user:", user.email)
-    return jwt.sign(payload, JWT_SECRET, { expiresIn: "7d" })
-  } catch (error) {
-    console.error("Token generation error:", error)
-    throw error
+export function setUser(user: User) {
+  if (typeof window !== "undefined") {
+    localStorage.setItem(AUTH_KEY, JSON.stringify(user))
   }
 }
 
-export function verifyToken(token: string): JWTPayload | null {
-  try {
-    return jwt.verify(token, JWT_SECRET) as JWTPayload
-  } catch (error) {
-    console.error("Token verification error:", error)
-    return null
+export function getUser(): User | null {
+  if (typeof window !== "undefined") {
+    const stored = localStorage.getItem(AUTH_KEY)
+    return stored ? JSON.parse(stored) : null
   }
-}
-
-export function getTokenFromRequest(request: Request): string | null {
-  const authHeader = request.headers.get("authorization")
-  if (authHeader && authHeader.startsWith("Bearer ")) {
-    return authHeader.substring(7)
-  }
-
-  // Also check cookies for browser requests
-  const cookieHeader = request.headers.get("cookie")
-  if (cookieHeader) {
-    const cookies = cookieHeader.split(";").reduce(
-      (acc, cookie) => {
-        const [key, value] = cookie.trim().split("=")
-        acc[key] = value
-        return acc
-      },
-      {} as Record<string, string>,
-    )
-
-    return cookies.token || null
-  }
-
   return null
+}
+
+export function removeUser() {
+  if (typeof window !== "undefined") {
+    localStorage.removeItem(AUTH_KEY)
+  }
+}
+
+export function isAuthenticated(): boolean {
+  return getUser() !== null
+}
+
+// Demo credentials for testing
+export const DEMO_CREDENTIALS = {
+  email: "admin@neontek.co.ke",
+  password: "admin123",
+  user: {
+    id: "1",
+    email: "admin@neontek.co.ke",
+    name: "NeonTek Admin",
+  },
 }

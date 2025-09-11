@@ -1,48 +1,55 @@
-export interface DashboardMetrics {
-  totalClients: number
-  activeProjects: number
-  tasksDueThisWeek: number
-  expiringServices: number
-}
-
-export interface RecentActivity {
-  type: "client" | "project"
-  message: string
-  date: Date
-}
-
-export interface UpcomingTask {
-  _id: string
-  title: string
-  dueDate: Date
-  status: string
-  project: {
-    _id: string
-    name: string
-    client: {
-      _id: string
-      name: string
-    }
-  }
-}
-
-export interface ExpiringService {
-  _id: string
+// Type definitions for NeonTek CRM
+export interface Client {
+  id: string
   name: string
-  domainExpiry?: Date
-  hostingExpiry?: Date
-  client: {
-    _id: string
-    name: string
-  }
+  email: string
+  phone: string
+  company: string
+  contactPerson: string
+  serviceOffered: string
+  hostingProvider?: string
+  hostingExpiryDate?: string
+  hostingPrice?: number
+  domainName?: string
+  domainExpiryDate?: string
+  domainPrice?: number
+  createdAt: string
+  updatedAt: string
 }
 
-export interface DashboardData {
-  metrics: DashboardMetrics
-  recentActivity: RecentActivity[]
-  upcomingDeadlines: {
-    tasks: UpcomingTask[]
-    domains: ExpiringService[]
-    hosting: ExpiringService[]
-  }
+export interface Project {
+  id: string
+  clientId: string
+  name: string
+  description: string
+  status: "planning" | "in-progress" | "completed" | "on-hold"
+  startDate: string
+  endDate?: string
+  budget?: number
+  createdAt: string
+  updatedAt: string
+}
+
+export interface Task {
+  id: string
+  projectId: string
+  title: string
+  description: string
+  status: "todo" | "in-progress" | "completed"
+  priority: "low" | "medium" | "high"
+  assignedTo?: string
+  dueDate?: string
+  createdAt: string
+  updatedAt: string
+}
+
+export interface Notification {
+  id: string
+  type: "domain-expiry" | "hosting-expiry" | "general"
+  clientId: string
+  title: string
+  message: string
+  daysUntilExpiry?: number
+  isRead: boolean
+  createdAt: string
 }

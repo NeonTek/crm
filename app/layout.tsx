@@ -1,44 +1,33 @@
-import type React from "react";
-import type { Metadata } from "next";
-import { GeistSans } from "geist/font/sans";
-import { GeistMono } from "geist/font/mono";
-import { Analytics } from "@vercel/analytics/next";
-import { ThemeProvider } from "@/components/theme-provider";
-import { AuthProvider } from "@/lib/auth-context";
-import { AuthWrapper } from "@/components/auth/auth-wrapper";
-import { Toaster } from "@/components/ui/sonner";
-import { Suspense } from "react";
-import "./globals.css";
+import type React from "react"
+import type { Metadata } from "next"
+import { GeistSans } from "geist/font/sans"
+import { GeistMono } from "geist/font/mono"
+import { Analytics } from "@vercel/analytics/next"
+import { ThemeProvider } from "@/components/theme-provider"
+import { Suspense } from "react"
+import "./globals.css"
 
 export const metadata: Metadata = {
-  title: "Neontek CRM - Client Relationship Management",
-  description: "Professional CRM application for Neontek Digital Agency",
-  generator: "Neontek CRM",
-};
+  title: "NeonTek | CRM",
+  description: "Professional CRM system for managing clients, projects, and tasks",
+  generator: "v0.app",
+}
 
 export default function RootLayout({
   children,
 }: Readonly<{
-  children: React.ReactNode;
+  children: React.ReactNode
 }>) {
   return (
-    <html lang="en" suppressHydrationWarning>
+    <html lang="en">
       <body className={`font-sans ${GeistSans.variable} ${GeistMono.variable}`}>
-        <ThemeProvider
-          attribute="class"
-          defaultTheme="dark"
-          enableSystem
-          disableTransitionOnChange
-        >
-          <AuthProvider>
-            <Suspense fallback={<div>Loading...</div>}>
-              <AuthWrapper>{children}</AuthWrapper>
-              <Toaster />
-            </Suspense>
-          </AuthProvider>
-        </ThemeProvider>
+        <Suspense fallback={null}>
+          <ThemeProvider attribute="class" defaultTheme="system" enableSystem disableTransitionOnChange>
+            {children}
+          </ThemeProvider>
+        </Suspense>
         <Analytics />
       </body>
     </html>
-  );
+  )
 }
