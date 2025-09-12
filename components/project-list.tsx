@@ -233,7 +233,6 @@ export function ProjectList() {
                 </Badge>
                 {project.budget && (
                   <div className="flex items-center gap-1 text-sm text-muted-foreground">
-                    <DollarSign className="h-3 w-3" />
                     <span>
                       {project.budget.toLocaleString("en-KE", {
                         style: "currency",
