@@ -170,7 +170,7 @@ export function ProjectForm({ project, onSuccess, onCancel }: ProjectFormProps) 
               </div>
 
               <div className="space-y-2">
-                <Label htmlFor="budget">Budget (USD)</Label>
+                <Label htmlFor="budget">Budget (KES)</Label>
                 <Input
                   id="budget"
                   type="number"
