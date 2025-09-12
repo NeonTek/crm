@@ -31,11 +31,11 @@ export function isAuthenticated(): boolean {
 }
 
 export const DEMO_CREDENTIALS = {
-  email: "admin@neontek.co.ke",
-  password: "admin123",
+  email: process.env.NEONTEK_ADMIN_EMAIL,
+  password: process.env.NEONTEK_ADMIN_PASS,
   user: {
     id: "1",
-    email: "admin@neontek.co.ke",
-    name: "NeonTek Admin",
+    email: process.env.NEONTEK_ADMIN_EMAIL,
+    name: process.env.NEONTEK_ADMIN_NAME,
   },
 }
