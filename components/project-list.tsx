@@ -234,7 +234,13 @@ export function ProjectList() {
                 {project.budget && (
                   <div className="flex items-center gap-1 text-sm text-muted-foreground">
                     <DollarSign className="h-3 w-3" />
-                    <span>{project.budget.toLocaleString('KES')}</span>
+                    <span>
+                      {project.budget.toLocaleString("en-KE", {
+                        style: "currency",
+                        currency: "KES",
+                        })
+                      }
+                    </span>
                   </div>
                 )}
               </div>
