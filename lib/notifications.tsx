@@ -97,7 +97,7 @@ export function generateEmailContent(client: Client, type: "hosting" | "domain",
                     <li><strong>Company:</strong> ${client.company}</li>
                     <li><strong>${isHosting ? "Hosting Provider" : "Domain Name"}:</strong> ${serviceDetails}</li>
                     <li><strong>Expiry Date:</strong> ${expiryDate ? new Date(expiryDate).toLocaleDateString() : "Not specified"}</li>
-                    ${price ? `<li><strong>Renewal Price:</strong> $${price}</li>` : ""}
+                    ${price ? `<li><strong>Renewal Price:</strong> KES${price}</li>` : ""}
                 </ul>
             </div>
             

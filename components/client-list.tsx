@@ -172,7 +172,7 @@ export function ClientList() {
                   <div className="flex items-center gap-2 text-sm">
                     <Server className="h-4 w-4 text-muted-foreground" />
                     <span>{client.hostingProvider}</span>
-                    {client.hostingPrice && <span className="text-muted-foreground">(${client.hostingPrice})</span>}
+                    {client.hostingPrice && <span className="text-muted-foreground">(KES{client.hostingPrice})</span>}
                   </div>
                   {client.hostingExpiryDate && (
                     <div className="flex items-center gap-2 text-xs">
@@ -194,7 +194,7 @@ export function ClientList() {
                   <div className="flex items-center gap-2 text-sm">
                     <Globe className="h-4 w-4 text-muted-foreground" />
                     <span>{client.domainName}</span>
-                    {client.domainPrice && <span className="text-muted-foreground">(${client.domainPrice})</span>}
+                    {client.domainPrice && <span className="text-muted-foreground">(KES{client.domainPrice})</span>}
                   </div>
                   {client.domainExpiryDate && (
                     <div className="flex items-center gap-2 text-xs">

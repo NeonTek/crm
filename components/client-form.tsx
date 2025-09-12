@@ -172,7 +172,7 @@ export function ClientForm({ client, onSuccess, onCancel }: ClientFormProps) {
                 />
               </div>
               <div className="space-y-2">
-                <Label htmlFor="hostingPrice">Hosting Price (USD)</Label>
+                <Label htmlFor="hostingPrice">Hosting Price (KES)</Label>
                 <Input
                   id="hostingPrice"
                   type="number"
@@ -208,7 +208,7 @@ export function ClientForm({ client, onSuccess, onCancel }: ClientFormProps) {
                 />
               </div>
               <div className="space-y-2">
-                <Label htmlFor="domainPrice">Domain Price (USD)</Label>
+                <Label htmlFor="domainPrice">Domain Price (KES)</Label>
                 <Input
                   id="domainPrice"
                   type="number"
