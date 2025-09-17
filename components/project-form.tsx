@@ -108,22 +108,24 @@ export function ProjectForm({ project, onSuccess, onCancel }: ProjectFormProps) 
         </div>
       </CardHeader>
       <CardContent>
-        <form onSubmit={handleSubmit} className="space-y-6">
+        <form onSubmit={handleSubmit} className="space-y-6 overflow-y-hidden">
           <div className="space-y-4">
             <div className="space-y-2">
               <Label htmlFor="clientId">Client *</Label>
-              <Select value={formData.clientId} onValueChange={(value) => handleChange("clientId", value)}>
-                <SelectTrigger>
+                <div className="max-w-full overflow-x-hidden">
+                <Select value={formData.clientId} onValueChange={(value) => handleChange("clientId", value)}>
+                  <SelectTrigger>
                   <SelectValue placeholder="Select a client" />
-                </SelectTrigger>
-                <SelectContent>
+                  </SelectTrigger>
+                  <SelectContent className="max-h-60 overflow-y-auto">
                   {clients.map((client) => (
                     <SelectItem key={client.id} value={client.id}>
-                      {client.name} - {client.company}
+                    {client.name} - {client.company}
                     </SelectItem>
                   ))}
-                </SelectContent>
-              </Select>
+                  </SelectContent>
+                </Select>
+                </div>
               {selectedClient && (
                 <p className="text-sm text-muted-foreground">
                   Contact: {selectedClient.email} | Service: {selectedClient.serviceOffered}

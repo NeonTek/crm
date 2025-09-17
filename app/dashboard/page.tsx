@@ -9,9 +9,12 @@ export default function DashboardPage() {
     <div className="space-y-8">
       {/* Welcome Section */}
       <div>
-        <h1 className="text-3xl font-bold tracking-tight">Welcome to NeonTek CRM</h1>
+        <h1 className="text-3xl font-bold tracking-tight">
+          Welcome to NeonTek CRM
+        </h1>
         <p className="text-muted-foreground">
-          Manage your clients, projects, and tasks efficiently with our comprehensive CRM system.
+          Manage your clients, projects, and tasks efficiently with our
+          comprehensive CRM system.
         </p>
       </div>
 
@@ -27,7 +30,8 @@ export default function DashboardPage() {
               Client Management
             </CardTitle>
             <CardDescription>
-              Add new clients and manage their information, hosting, and domain details.
+              Add new clients and manage their information, hosting, and domain
+              details.
             </CardDescription>
           </CardHeader>
           <CardContent>
@@ -55,7 +59,8 @@ export default function DashboardPage() {
               Project Management
             </CardTitle>
             <CardDescription>
-              Create and track projects for your clients with detailed progress monitoring.
+              Create and track projects for your clients with detailed progress
+              monitoring.
             </CardDescription>
           </CardHeader>
           <CardContent>
@@ -82,7 +87,10 @@ export default function DashboardPage() {
               <CheckSquare className="h-5 w-5 text-primary" />
               Task Management
             </CardTitle>
-            <CardDescription>Break down projects into manageable tasks and track their completion.</CardDescription>
+            <CardDescription>
+              Break down projects into manageable tasks and track their
+              completion.
+            </CardDescription>
           </CardHeader>
           <CardContent>
             <div className="flex gap-2">
@@ -111,7 +119,8 @@ export default function DashboardPage() {
             Notification Center
           </CardTitle>
           <CardDescription>
-            Monitor domain and hosting expiry dates and send automated notifications to clients.
+            Monitor domain and hosting expiry dates and send automated
+            notifications to clients.
           </CardDescription>
         </CardHeader>
         <CardContent>
@@ -125,52 +134,6 @@ export default function DashboardPage() {
           </div>
         </CardContent>
       </Card>
-
-      {/* Features Overview */}
-      <Card>
-        <CardHeader>
-          <CardTitle>System Features</CardTitle>
-          <CardDescription>
-            NeonTek CRM provides comprehensive tools for managing your business operations.
-          </CardDescription>
-        </CardHeader>
-        <CardContent>
-          <div className="grid gap-4 md:grid-cols-2">
-            <div className="space-y-2">
-              <h4 className="font-semibold">Client Management</h4>
-              <ul className="text-sm text-muted-foreground space-y-1">
-                <li>• Complete client information tracking</li>
-                <li>• Hosting and domain expiry monitoring</li>
-                <li>• Service pricing and renewal tracking</li>
-              </ul>
-            </div>
-            <div className="space-y-2">
-              <h4 className="font-semibold">Project & Task Management</h4>
-              <ul className="text-sm text-muted-foreground space-y-1">
-                <li>• Project status and progress tracking</li>
-                <li>• Task assignment and priority management</li>
-                <li>• Budget and timeline monitoring</li>
-              </ul>
-            </div>
-            <div className="space-y-2">
-              <h4 className="font-semibold">Automated Notifications</h4>
-              <ul className="text-sm text-muted-foreground space-y-1">
-                <li>• 30-day, 7-day, and 1-day expiry alerts</li>
-                <li>• Professional HTML email templates</li>
-                <li>• Manual and automated email sending</li>
-              </ul>
-            </div>
-            <div className="space-y-2">
-              <h4 className="font-semibold">Modern Interface</h4>
-              <ul className="text-sm text-muted-foreground space-y-1">
-                <li>• Dark and light theme support</li>
-                <li>• Responsive design for all devices</li>
-                <li>• Intuitive navigation and search</li>
-              </ul>
-            </div>
-          </div>
-        </CardContent>
-      </Card>
     </div>
-  )
+  );
 }

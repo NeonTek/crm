@@ -16,9 +16,9 @@ export function DashboardHeader() {
     <header className="sticky top-0 z-40 border-b bg-background/95 backdrop-blur supports-[backdrop-filter]:bg-background/60">
       <div className="flex h-16 items-center gap-4 px-4 lg:px-6">
         {/* Mobile Menu */}
-        <div className="lg:hidden">
+        {/* <div className="lg:hidden">
           <DashboardSidebar />
-        </div>
+        </div> */}
 
         {/* Spacer for desktop */}
         <div className="hidden lg:block lg:w-64" />

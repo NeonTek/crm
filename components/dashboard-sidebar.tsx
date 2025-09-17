@@ -104,7 +104,12 @@ export function DashboardSidebar({ className }: DashboardSidebarProps) {
   return (
     <>
       {/* Desktop Sidebar */}
-      <div className={cn("hidden lg:flex lg:w-64 lg:flex-col lg:fixed lg:inset-y-0", className)}>
+      <div
+        className={cn(
+          "hidden lg:flex lg:w-64 lg:flex-col lg:fixed lg:inset-y-0",
+          className
+        )}
+      >
         <div className="flex flex-col flex-grow bg-sidebar border-r border-sidebar-border">
           <SidebarContent />
         </div>
@@ -112,7 +117,7 @@ export function DashboardSidebar({ className }: DashboardSidebarProps) {
 
       {/* Mobile Sidebar */}
       <Sheet>
-        <SheetTrigger asChild>
+        <SheetTrigger>
           <Button variant="ghost" size="sm" className="lg:hidden">
             <Menu className="h-5 w-5" />
           </Button>
@@ -124,5 +129,5 @@ export function DashboardSidebar({ className }: DashboardSidebarProps) {
         </SheetContent>
       </Sheet>
     </>
-  )
+  );
 }
