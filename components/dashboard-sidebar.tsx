@@ -118,7 +118,7 @@ export function DashboardSidebar({ className }: DashboardSidebarProps) {
       {/* Mobile Sidebar */}
       <Sheet>
         <SheetTrigger>
-          <Button variant="ghost" size="sm" className="lg:hidden">
+          <Button variant="ghost" size="sm" className="lg:hidden fixed top-[1rem] left-[1rem] z-50">
             <Menu className="h-5 w-5" />
           </Button>
         </SheetTrigger>
