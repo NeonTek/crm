@@ -21,7 +21,7 @@ export function BulkNotificationForm() {
   const [clients, setClients] = useState<Client[]>([]);
   const [selectedClients, setSelectedClients] = useState<string[]>([]);
   const [subject, setSubject] = useState("");
-  const [htmlContent, setHtmlContent] = useState("");
+  const [message, setMessage] = useState(""); // Changed from htmlContent
   const [isLoading, setIsLoading] = useState(false);
   const [error, setError] = useState("");
   const [successMessage, setSuccessMessage] = useState("");
@@ -71,7 +71,7 @@ export function BulkNotificationForm() {
         body: JSON.stringify({
           clientIds: selectedClients,
           subject,
-          htmlContent,
+          message, // Send message instead of htmlContent
         }),
       });
 
@@ -84,7 +84,7 @@ export function BulkNotificationForm() {
       setSuccessMessage(result.message);
       setSelectedClients([]);
       setSubject("");
-      setHtmlContent("");
+      setMessage(""); // Clear message
     } catch (err: unknown) {
       const errorMessage =
         err instanceof Error ? err.message : "An unknown error occurred";
@@ -99,7 +99,7 @@ export function BulkNotificationForm() {
       <CardHeader>
         <CardTitle>Send Bulk Notifications</CardTitle>
         <CardDescription>
-          Create and send HTML formatted emails to multiple clients at once.
+          Compose a message and send it to multiple clients at once.
         </CardDescription>
       </CardHeader>
       <CardContent>
@@ -151,12 +151,12 @@ export function BulkNotificationForm() {
           </div>
 
           <div className="space-y-2">
-            <Label htmlFor="htmlContent">HTML Content</Label>
+            <Label htmlFor="message">Message</Label>
             <Textarea
-              id="htmlContent"
-              value={htmlContent}
-              onChange={(e) => setHtmlContent(e.target.value)}
-              placeholder="<html>...</html>"
+              id="message"
+              value={message}
+              onChange={(e) => setMessage(e.target.value)}
+              placeholder="Type your message here. It will be placed into a professional email template."
               rows={10}
               required
             />
@@ -177,10 +177,7 @@ export function BulkNotificationForm() {
           <Button
             type="submit"
             disabled={
-              isLoading ||
-              selectedClients.length === 0 ||
-              !subject ||
-              !htmlContent
+              isLoading || selectedClients.length === 0 || !subject || !message
             }
           >
             <Send className="h-4 w-4 mr-2" />

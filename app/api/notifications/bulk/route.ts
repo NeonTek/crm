@@ -2,15 +2,16 @@ import { type NextRequest, NextResponse } from "next/server";
 import { getClients } from "@/lib/data";
 import nodemailer from "nodemailer";
 import type { Client } from "@/lib/types";
+import { generateBulkEmailContent } from "@/lib/notifications"; // Import the new template function
 
 export async function POST(request: NextRequest) {
   try {
-    const { clientIds, subject, htmlContent } = await request.json();
+    const { clientIds, subject, message } = await request.json(); // Changed htmlContent to message
 
     if (
       !clientIds ||
       !subject ||
-      !htmlContent ||
+      !message ||
       !Array.isArray(clientIds) ||
       clientIds.length === 0
     ) {
@@ -52,8 +53,15 @@ export async function POST(request: NextRequest) {
     });
 
     const emailPromises = selectedClients.map((client: Client) => {
+      // Generate HTML for each client using the template
+      const htmlContent = generateBulkEmailContent({
+        clientName: client.contactPerson || client.name,
+        subject,
+        message,
+      });
+
       return transporter.sendMail({
-        from: `"NeonTek CRM" <no-reply@neontek.co.ke>`,
+        from: `"NeonTek Notifications" <no-reply@neontek.co.ke>`,
         to: client.email,
         subject,
         html: htmlContent,

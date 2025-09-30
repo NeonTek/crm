@@ -162,3 +162,141 @@ export async function sendExpiryEmail(
     }
   }
 }
+
+export function generateBulkEmailContent({
+  clientName,
+  subject,
+  message,
+}: {
+  clientName: string;
+  subject: string;
+  message: string;
+}): string {
+  const formattedMessage = message.replace(/\n/g, "<br />");
+
+  return `
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>${subject}</title>
+    <style>
+        body {
+            margin: 0;
+            padding: 0;
+            font-family: Arial, sans-serif;
+            -webkit-font-smoothing: antialiased;
+            -moz-osx-font-smoothing: grayscale;
+        }
+        .container {
+            width: 100%;
+            max-width: 600px;
+            margin: 0 auto;
+            padding: 20px;
+            background-color: #f9f9f9;
+        }
+        .header {
+            text-align: center;
+            padding: 20px 0;
+        }
+        .header img {
+            max-width: 150px;
+        }
+        .content {
+            background-color: #ffffff;
+            padding: 30px;
+            border-radius: 8px;
+            box-shadow: 0 4px 8px rgba(0,0,0,0.1);
+        }
+        .content h2 {
+            font-size: 24px;
+            color: #333333;
+            margin-bottom: 20px;
+        }
+        .content p {
+            font-size: 16px;
+            line-height: 1.6;
+            color: #555555;
+        }
+        .button-container {
+            text-align: center;
+            margin: 30px 0;
+        }
+        .button {
+            display: inline-block;
+            background-color: #00BFFF;
+            color: #ffffff;
+            padding: 12px 24px;
+            text-decoration: none;
+            border-radius: 5px;
+            font-weight: bold;
+        }
+        .footer {
+            text-align: center;
+            padding: 30px 0;
+            font-size: 12px;
+            color: #888888;
+        }
+        .social-links a {
+            margin: 0 10px;
+            display: inline-block;
+        }
+        .social-links img {
+            width: 24px;
+            height: 24px;
+        }
+        .legal-links {
+            margin-top: 15px;
+        }
+        .legal-links a {
+            color: #888888;
+            text-decoration: none;
+            margin: 0 5px;
+        }
+        .disclaimer {
+            margin-top: 15px;
+            font-style: italic;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="header">
+            <a href="https://neontek.co.ke" target="_blank">
+                <img src="https://www.neontek.co.ke/images/logo.png" alt="NeonTek Logo">
+            </a>
+        </div>
+        <div class="content">
+            <h2>${subject}</h2>
+            <p>Dear ${clientName},</p>
+            <p>${formattedMessage}</p>
+            <p>If you have any questions, please do not hesitate to reach out to our team.</p>
+            <div class="button-container">
+                <a href="mailto:admin@neontek.co.ke" class="button">Contact Us</a>
+            </div>
+            <p>Best regards,<br>
+            <strong>The NeonTek Team</strong></p>
+        </div>
+        <div class="footer">
+            <div class="social-links">
+                <a href="https://neontek.co.ke/links/instagram" target="_blank"><img src="https://img.icons8.com/ios-glyphs/30/888888/instagram-new.png" alt="Instagram"></a>
+                <a href="https://neontek.co.ke/links/facebook" target="_blank"><img src="https://img.icons8.com/ios-glyphs/30/888888/facebook.png" alt="Facebook"></a>
+                <a href="https://neontek.co.ke/links/x" target="_blank"><img src="https://img.icons8.com/ios-glyphs/30/888888/twitterx.png" alt="X"></a>
+            </div>
+            <div class="legal-links">
+                <a href="https://neontek.co.ke/legal/terms-of-service" target="_blank">Terms of Service</a> |
+                <a href="https://neontek.co.ke/legal/privacy-policy" target="_blank">Privacy Policy</a> |
+                <a href="https://neontek.co.ke/legal/cookie-policy" target="_blank">Cookie Policy</a>
+            </div>
+            <p class="disclaimer">
+                This email and any attachments are confidential and intended solely for the use of the individual to whom it is addressed. If you have received this email in error, please notify the sender immediately and delete this email from your system.
+            </p>
+            <p>&copy; ${new Date().getFullYear()} NeonTek. All rights reserved.</p>
+        </div>
+    </div>
+</body>
+</html>
+  `.trim();
+}
+
