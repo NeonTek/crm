@@ -44,7 +44,12 @@ export default function ClientLoginPage() {
       });
 
       if (res.ok) {
+        toast({
+          title: "Login Successful",
+          description: "Redirecting to your dashboard...",
+        });
         router.push("/portal/dashboard");
+        router.refresh(); // Ensures the page reloads to reflect the new session state
       } else {
         const data = await res.json();
         toast({
