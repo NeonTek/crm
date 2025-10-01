@@ -1,143 +1,147 @@
-"use client"
-import Link from "next/link"
-import { usePathname, useRouter } from "next/navigation"
-import { Button } from "@/components/ui/button"
-import { Sheet, SheetContent, SheetTrigger } from "@/components/ui/sheet"
-import { removeUser } from "@/lib/auth"
-import { cn } from "@/lib/utils"
-import { Building2, LifeBuoy, Users, FolderOpen, CheckSquare, Bell, BarChart3, LogOut, Menu, Sun, Moon, Mail } from "lucide-react"
-import { useTheme } from "next-themes"
+"use client";
+
+import Link from "next/link";
+import Image from "next/image";
+import { usePathname, useRouter } from "next/navigation";
+import { Button } from "@/components/ui/button";
+import { Sheet, SheetContent, SheetTrigger } from "@/components/ui/sheet";
+import { removeUser } from "@/lib/auth";
+import { cn } from "@/lib/utils";
+import {
+  Users,
+  FolderOpen,
+  CheckSquare,
+  Bell,
+  BarChart3,
+  LogOut,
+  Menu,
+  Sun,
+  Moon,
+  Mail,
+  LifeBuoy,
+} from "lucide-react";
+import { useTheme } from "next-themes";
 
 const navigation = [
-  {
-    name: "Dashboard",
-    href: "/dashboard",
-    icon: BarChart3,
-  },
-  {
-    name: "Clients",
-    href: "/dashboard/clients",
-    icon: Users,
-  },
-  {
-    name: "Projects",
-    href: "/dashboard/projects",
-    icon: FolderOpen,
-  },
-  {
-    name: "Tasks",
-    href: "/dashboard/tasks",
-    icon: CheckSquare,
-  },
-  {
-    name: "Notifications",
-    href: "/dashboard/notifications",
-    icon: Bell,
-  },
-  {
-    name: "Bulk Mail",
-    href: "/dashboard/notifications/bulk",
-    icon: Mail,
-  },
-  {
-    name: "Support Tickets",
-    href: "/dashboard/tickets",
-    icon: LifeBuoy,
-  },
+  { name: "Dashboard", href: "/dashboard", icon: BarChart3 },
+  { name: "Clients", href: "/dashboard/clients", icon: Users },
+  { name: "Projects", href: "/dashboard/projects", icon: FolderOpen },
+  { name: "Tasks", href: "/dashboard/tasks", icon: CheckSquare },
+  { name: "Notifications", href: "/dashboard/notifications", icon: Bell },
+  { name: "Bulk Mail", href: "/dashboard/notifications/bulk", icon: Mail },
+  { name: "Support Tickets", href: "/dashboard/tickets", icon: LifeBuoy },
 ];
 
-interface DashboardSidebarProps {
-  className?: string
-}
-
-export function DashboardSidebar({ className }: DashboardSidebarProps) {
-  const pathname = usePathname()
-  const router = useRouter()
-  const { theme, setTheme } = useTheme()
+export function DashboardSidebar({ className }: { className?: string }) {
+  const pathname = usePathname();
+  const router = useRouter();
+  const { theme, setTheme } = useTheme();
 
   const handleLogout = () => {
-    removeUser()
-    router.push("/")
-  }
+    removeUser();
+    router.push("/");
+  };
 
   const toggleTheme = () => {
-    setTheme(theme === "dark" ? "light" : "dark")
-  }
+    setTheme(theme === "dark" ? "light" : "dark");
+  };
 
   const SidebarContent = () => (
-    <div className="flex h-full flex-col">
+    <div className="flex h-full flex-col bg-sidebar text-sidebar-foreground">
       {/* Logo */}
-      <div className="flex h-16 items-center border-b px-6">
+      <div className="flex h-16 items-center justify-center border-b border-sidebar-border px-4">
         <Link href="/dashboard" className="flex items-center gap-2">
-          <Building2 className="h-6 w-6 text-primary" />
-          <span className="text-lg font-bold text-primary">NeonTek</span>
-          <span className="text-sm text-muted-foreground">| CRM</span>
+          <Image
+            src="/logo.png"
+            alt="NeonTek Logo"
+            width={120}
+            height={40}
+            className="dark:invert"
+          />
         </Link>
       </div>
 
       {/* Navigation */}
-      <nav className="flex-1 space-y-1 px-4 py-6">
+      <nav className="flex-1 space-y-2 overflow-y-auto px-4 py-6">
         {navigation.map((item) => {
-          const isActive = pathname === item.href
+          const isActive = pathname === item.href;
           return (
             <Link
               key={item.name}
               href={item.href}
               className={cn(
-                "flex items-center gap-3 rounded-lg px-3 py-2 text-sm font-medium transition-colors",
+                "flex items-center gap-3 rounded-lg px-3 py-2 text-sm font-medium transition-all",
                 isActive
-                  ? "bg-primary text-primary-foreground"
-                  : "text-muted-foreground hover:bg-accent hover:text-accent-foreground",
+                  ? "bg-sidebar-primary text-sidebar-primary-foreground"
+                  : "text-sidebar-foreground/70 hover:bg-sidebar-accent hover:text-sidebar-accent-foreground"
               )}
             >
-              <item.icon className="h-4 w-4" />
-              {item.name}
+              <item.icon className="h-5 w-5" />
+              <span>{item.name}</span>
             </Link>
-          )
+          );
         })}
       </nav>
 
       {/* Bottom Actions */}
-      <div className="border-t p-4 space-y-2">
-        <Button variant="ghost" size="sm" onClick={toggleTheme} className="w-full justify-start">
-          {theme === "dark" ? <Sun className="h-4 w-4 mr-2" /> : <Moon className="h-4 w-4 mr-2" />}
-          {theme === "dark" ? "Light Mode" : "Dark Mode"}
-        </Button>
-        <Button variant="ghost" size="sm" onClick={handleLogout} className="w-full justify-start text-red-600">
-          <LogOut className="h-4 w-4 mr-2" />
-          Logout
-        </Button>
+      <div className="border-t border-sidebar-border p-4">
+        <div className="space-y-2">
+          <Button
+            variant="ghost"
+            size="sm"
+            onClick={toggleTheme}
+            className="w-full justify-start text-sidebar-foreground/70 hover:bg-sidebar-accent hover:text-sidebar-accent-foreground"
+          >
+            {theme === "dark" ? (
+              <Sun className="h-4 w-4 mr-2" />
+            ) : (
+              <Moon className="h-4 w-4 mr-2" />
+            )}
+            {theme === "dark" ? "Light Mode" : "Dark Mode"}
+          </Button>
+          <Button
+            variant="ghost"
+            size="sm"
+            onClick={handleLogout}
+            className="w-full justify-start text-red-500 hover:bg-red-500/10 hover:text-red-500"
+          >
+            <LogOut className="h-4 w-4 mr-2" />
+            Logout
+          </Button>
+        </div>
       </div>
     </div>
-  )
+  );
 
   return (
     <>
       {/* Desktop Sidebar */}
       <div
         className={cn(
-          "hidden lg:flex lg:w-64 lg:flex-col lg:fixed lg:inset-y-0",
+          "hidden lg:fixed lg:inset-y-0 lg:z-50 lg:flex lg:w-64 lg:flex-col",
           className
         )}
       >
-        <div className="flex flex-col flex-grow bg-sidebar border-r border-sidebar-border">
-          <SidebarContent />
-        </div>
+        <SidebarContent />
       </div>
 
-      {/* Mobile Sidebar */}
-      <Sheet>
-        <SheetTrigger>
-          <Button variant="ghost" size="sm" className="lg:hidden fixed top-[1rem] left-[1rem] z-50">
-            <Menu className="h-5 w-5" />
-          </Button>
-        </SheetTrigger>
-        <SheetContent side="left" className="w-64 p-0">
-          <div className="bg-sidebar h-full">
+      {/* Mobile Sidebar Trigger*/}
+      <div className="lg:hidden">
+        <Sheet>
+          <SheetTrigger asChild>
+            <Button
+              variant="ghost"
+              size="icon"
+              className="fixed top-4 left-4 z-40"
+            >
+              <Menu className="h-5 w-5" />
+            </Button>
+          </SheetTrigger>
+          <SheetContent side="left" className="w-64 p-0">
             <SidebarContent />
-          </div>
-        </SheetContent>
-      </Sheet>
+          </SheetContent>
+        </Sheet>
+      </div>
     </>
   );
 }

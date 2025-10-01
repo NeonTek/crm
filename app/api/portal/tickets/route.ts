@@ -47,7 +47,27 @@ export async function POST(req: Request) {
     messages: [{ sender: "client", content: message }],
   });
 
-  // You can add an email notification to the admin here
+  const adminEmail = process.env.EMAIL_USER || "info@neontek.co.ke";
+  const baseUrl = process.env.NEXT_PUBLIC_BASE_URL || "http://localhost:3000";
+
+  const emailSubject = `New Support Ticket: ${subject}`;
+  const htmlContent = `
+    <h1>New Support Ticket from ${client.name}</h1>
+    <p><strong>Subject:</strong> ${subject}</p>
+    <p><strong>Message:</strong></p>
+    <p>${message}</p>
+    <a href="${baseUrl}/dashboard/tickets/${newTicket.id}">Click here to view and reply to the ticket</a>
+  `;
+
+  await fetch(`${baseUrl}/api/send-email`, {
+    method: "POST",
+    headers: { "Content-Type": "application/json" },
+    body: JSON.stringify({
+      to: adminEmail,
+      subject: emailSubject,
+      htmlContent,
+    }),
+  });
 
   return NextResponse.json(newTicket, { status: 201 });
 }

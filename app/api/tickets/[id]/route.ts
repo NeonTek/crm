@@ -1,6 +1,7 @@
 import { NextResponse } from "next/server";
 import connectDB from "@/lib/mongoose";
 import { TicketModel } from "@/lib/models";
+import { getClientById } from "@/lib/data";
 
 // GET a single ticket by ID
 export async function GET(
@@ -15,7 +16,6 @@ export async function GET(
   return NextResponse.json(ticket);
 }
 
-// POST a new reply from an admin
 export async function POST(
   req: Request,
   { params }: { params: { id: string } }
@@ -38,9 +38,34 @@ export async function POST(
   if (!ticket) {
     return NextResponse.json({ error: "Ticket not found" }, { status: 404 });
   }
+
+  // --- Start of Notification Logic ---
+  const client = await getClientById(ticket.clientId);
+  if (client && client.email) {
+    const baseUrl = process.env.NEXT_PUBLIC_BASE_URL || "http://localhost:3000";
+
+    const emailSubject = `Update on your ticket: ${ticket.subject}`;
+    const htmlContent = `
+      <h1>A reply has been added to your support ticket</h1>
+      <p><strong>Ticket:</strong> ${ticket.subject}</p>
+      <p><strong>Reply from NeonTek Support:</strong></p>
+      <p>${message}</p>
+      <a href="${baseUrl}/portal/tickets/${ticket.id}">Click here to view your ticket</a>
+    `;
+
+    await fetch(`${baseUrl}/api/send-email`, {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({
+        to: client.email,
+        subject: emailSubject,
+        htmlContent,
+      }),
+    });
+  }
+
   return NextResponse.json(ticket);
 }
-
 // PATCH to update ticket status
 export async function PATCH(
   req: Request,

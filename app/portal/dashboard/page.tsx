@@ -121,16 +121,6 @@ export default function ClientDashboardPage() {
 
   return (
     <div className="min-h-screen bg-muted/40">
-      <header className="sticky top-0 z-30 flex h-16 items-center justify-between gap-4 border-b bg-background px-4 sm:px-6">
-        <div className="flex items-center gap-2">
-          <Building2 className="h-6 w-6 text-primary" />
-          <h1 className="text-xl font-semibold">Client Portal</h1>
-        </div>
-        <Button onClick={handleLogout} variant="outline" size="sm">
-          <LogOut className="h-4 w-4 mr-2" />
-          Logout
-        </Button>
-      </header>
 
       <main className="grid flex-1 items-start gap-8 p-4 sm:px-6 sm:py-4 md:grid-cols-3">
         {/* Left Column for Services */}
