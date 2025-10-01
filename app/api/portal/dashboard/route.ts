@@ -1,7 +1,16 @@
 import { NextResponse } from "next/server";
 import { getClientSession } from "@/lib/portal-auth";
-import { getClientById, getProjectsByClientId, getTasksByProjectId } from "@/lib/data";
-import { Project, Task } from "@/lib/types";
+import { getClientById, getProjectsByClientId } from "@/lib/data";
+
+// Helper function to calculate days remaining
+const calculateDaysRemaining = (expiryDate?: string): number | null => {
+  if (!expiryDate) return null;
+  const today = new Date();
+  const expiry = new Date(expiryDate);
+  const diffTime = expiry.getTime() - today.getTime();
+  const diffDays = Math.ceil(diffTime / (1000 * 60 * 60 * 24));
+  return diffDays > 0 ? diffDays : 0;
+};
 
 export async function GET() {
   try {
@@ -18,16 +27,27 @@ export async function GET() {
     }
 
     const projects = await getProjectsByClientId(session.clientId);
-    const projectsWithTasks = await Promise.all(
-      projects.map(async (project) => {
-        const tasks = await getTasksByProjectId(project.id);
-        return { ...project, tasks };
-      })
-    );
+
+    // Add service details with days remaining
+    const services = {
+      hosting: {
+        provider: client.hostingProvider,
+        expiryDate: client.hostingExpiryDate,
+        price: client.hostingPrice,
+        daysRemaining: calculateDaysRemaining(client.hostingExpiryDate),
+      },
+      domain: {
+        name: client.domainName,
+        expiryDate: client.domainExpiryDate,
+        price: client.domainPrice,
+        daysRemaining: calculateDaysRemaining(client.domainExpiryDate),
+      },
+    };
 
     return NextResponse.json({
       client,
-      projects: projectsWithTasks,
+      projects,
+      services, // Include services in the response
     });
   } catch (error) {
     console.error("Error fetching client dashboard data:", error);
