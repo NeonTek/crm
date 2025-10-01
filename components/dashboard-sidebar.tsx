@@ -5,7 +5,7 @@ import { Button } from "@/components/ui/button"
 import { Sheet, SheetContent, SheetTrigger } from "@/components/ui/sheet"
 import { removeUser } from "@/lib/auth"
 import { cn } from "@/lib/utils"
-import { Building2, Users, FolderOpen, CheckSquare, Bell, BarChart3, LogOut, Menu, Sun, Moon, Mail } from "lucide-react"
+import { Building2, LifeBuoy, Users, FolderOpen, CheckSquare, Bell, BarChart3, LogOut, Menu, Sun, Moon, Mail } from "lucide-react"
 import { useTheme } from "next-themes"
 
 const navigation = [
@@ -38,6 +38,11 @@ const navigation = [
     name: "Bulk Mail",
     href: "/dashboard/notifications/bulk",
     icon: Mail,
+  },
+  {
+    name: "Support Tickets",
+    href: "/dashboard/tickets",
+    icon: LifeBuoy,
   },
 ];
 

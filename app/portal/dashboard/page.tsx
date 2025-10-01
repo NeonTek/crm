@@ -28,7 +28,9 @@ import {
   Calendar,
   DollarSign,
   AlertTriangle,
+  LifeBuoy,
 } from "lucide-react";
+import Link from "next/link";
 
 interface DashboardData {
   client: Client;
@@ -230,6 +232,24 @@ export default function ClientDashboardPage() {
                   No domain details available.
                 </p>
               )}
+            </CardContent>
+          </Card>
+
+          {/* Support Tickets Card */}
+          <Card>
+            <CardHeader>
+              <CardTitle className="flex items-center gap-2">
+                <LifeBuoy className="h-5 w-5" />
+                Support Center
+              </CardTitle>
+            </CardHeader>
+            <CardContent>
+              <p className="text-sm text-muted-foreground mb-4">
+                Need help? Open a new support ticket.
+              </p>
+              <Button asChild className="w-full">
+                <Link href="/portal/tickets">Go to Support</Link>
+              </Button>
             </CardContent>
           </Card>
         </div>

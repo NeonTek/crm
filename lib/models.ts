@@ -132,6 +132,59 @@ const NotificationSchema = new Schema<INotification>(
   }
 );
 
+// Ticket Schema
+interface IMessage extends Document {
+  sender: "client" | "staff";
+  content: string;
+  createdAt: Date;
+}
+
+const MessageSchema = new Schema<IMessage>({
+  sender: { type: String, enum: ["client", "staff"], required: true },
+  content: { type: String, required: true },
+}, { timestamps: { createdAt: true, updatedAt: false } });
+
+interface ITicket extends Document {
+  clientId: string;
+  clientName: string;
+  subject: string;
+  status: "open" | "in-progress" | "closed";
+  priority: "low" | "medium" | "high";
+  messages: IMessage[];
+  createdAt: Date;
+  updatedAt: Date;
+}
+
+const TicketSchema = new Schema<ITicket>(
+  {
+    clientId: { type: String, required: true, ref: "Client" },
+    clientName: { type: String, required: true },
+    subject: { type: String, required: true },
+    status: {
+      type: String,
+      enum: ["open", "in-progress", "closed"],
+      default: "open",
+    },
+    priority: {
+      type: String,
+      enum: ["low", "medium", "high"],
+      default: "medium",
+    },
+    messages: [MessageSchema],
+  },
+  {
+    timestamps: true,
+    toJSON: {
+      transform: (doc, ret) => {
+        ret.id = ret._id.toString();
+        delete ret._id;
+        delete ret.__v;
+        return ret;
+      },
+    },
+  }
+);
+
 // Export models
 export const ClientModel =
   mongoose.models.Client || mongoose.model<IClient>("Client", ClientSchema);
@@ -142,3 +195,7 @@ export const TaskModel =
 export const NotificationModel =
   mongoose.models.Notification ||
   mongoose.model<INotification>("Notification", NotificationSchema);
+
+export const TicketModel =
+  mongoose.models.Ticket || mongoose.model<ITicket>("Ticket", TicketSchema);
+
