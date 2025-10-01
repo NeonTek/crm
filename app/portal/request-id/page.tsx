@@ -64,7 +64,8 @@ export default function RequestIdPage() {
         <CardHeader>
           <CardTitle>Request Client ID</CardTitle>
           <CardDescription>
-            Enter your email address to receive your Client ID.
+            Enter your email address to receive your Client ID. You will need
+            this ID to log in to the client portal. You will receive it via email you enter below if it is registered on our system.
           </CardDescription>
         </CardHeader>
         <form onSubmit={handleSubmit}>
@@ -92,6 +93,15 @@ export default function RequestIdPage() {
                 className="font-semibold text-primary hover:underline"
               >
                 Login here
+              </Link>
+            </p>
+            <p className="text-sm text-muted-foreground">
+              Don't know your email?{" "}
+              <Link
+                href="https://neontek.co.ke/contact"
+                className="font-semibold text-primary hover:underline"
+              >
+                Ask Us
               </Link>
             </p>
           </CardFooter>
