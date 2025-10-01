@@ -35,7 +35,9 @@ const ClientSchema = new Schema<IClient>(
 );
 
 // Project Schema
-interface IProject extends Omit<Project, "id">, Document {}
+interface IProject extends Omit<Project, "id">, Document {
+  amountPaid?: number; // Add this
+}
 
 const ProjectSchema = new Schema<IProject>(
   {
@@ -50,6 +52,7 @@ const ProjectSchema = new Schema<IProject>(
     startDate: { type: String, required: true },
     endDate: { type: String },
     budget: { type: Number },
+    amountPaid: { type: Number, required: true, default: 0 },
   },
   {
     timestamps: true,
@@ -66,8 +69,48 @@ const ProjectSchema = new Schema<IProject>(
   }
 );
 
+// Payment Schema
+interface IPayment extends Document {
+  clientId: string;
+  projectId: string;
+  amount: number;
+  paymentDate: string;
+  paymentMethod: "cash" | "mpesa" | "bank_transfer" | "other";
+  notes?: string;
+  createdAt: Date;
+  updatedAt: Date;
+}
+
+const PaymentSchema = new Schema<IPayment>(
+  {
+    clientId: { type: String, required: true, ref: "Client" },
+    projectId: { type: String, required: true, ref: "Project" },
+    amount: { type: Number, required: true },
+    paymentDate: { type: String, required: true },
+    paymentMethod: {
+      type: String,
+      enum: ["cash", "mpesa", "bank_transfer", "other"],
+      default: "mpesa",
+    },
+    notes: { type: String },
+  },
+  {
+    timestamps: true,
+    toJSON: {
+      transform: (doc, ret) => {
+        ret.id = ret._id.toString();
+        delete ret._id;
+        delete ret.__v;
+        return ret;
+      },
+    },
+  }
+);
+
 // Task Schema
-interface ITask extends Omit<Task, "id">, Document {}
+interface ITask extends Omit<Task, "id">, Document {
+  cost?: number; // Add this
+}
 
 const TaskSchema = new Schema<ITask>(
   {
@@ -86,6 +129,7 @@ const TaskSchema = new Schema<ITask>(
     },
     assignedTo: { type: String },
     dueDate: { type: String },
+    cost: { type: Number, default: 0 },
   },
   {
     timestamps: true,
@@ -198,4 +242,7 @@ export const NotificationModel =
 
 export const TicketModel =
   mongoose.models.Ticket || mongoose.model<ITicket>("Ticket", TicketSchema);
+
+export const PaymentModel =
+  mongoose.models.Payment || mongoose.model<IPayment>("Payment", PaymentSchema);
 

@@ -19,6 +19,7 @@ import {
   Moon,
   Mail,
   LifeBuoy,
+  DollarSign,
 } from "lucide-react";
 import { useTheme } from "next-themes";
 
@@ -29,6 +30,11 @@ const navigation = [
   { name: "Tasks", href: "/dashboard/tasks", icon: CheckSquare },
   { name: "Notifications", href: "/dashboard/notifications", icon: Bell },
   { name: "Bulk Mail", href: "/dashboard/notifications/bulk", icon: Mail },
+  {
+    name: "Billing",
+    href: "/dashboard/billing",
+    icon: DollarSign,
+  },
   { name: "Support Tickets", href: "/dashboard/tickets", icon: LifeBuoy },
 ];
 

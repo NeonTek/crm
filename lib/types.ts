@@ -18,29 +18,31 @@ export interface Client {
 }
 
 export interface Project {
-  id: string
-  clientId: string
-  name: string
-  description: string
-  status: "planning" | "in-progress" | "completed" | "on-hold"
-  startDate: string
-  endDate?: string
-  budget?: number
-  createdAt: string
-  updatedAt: string
+  id: string;
+  clientId: string;
+  name: string;
+  description: string;
+  status: "planning" | "in-progress" | "completed" | "on-hold";
+  startDate: string;
+  endDate?: string;
+  budget?: number;
+  amountPaid?: number;
+  createdAt: string;
+  updatedAt: string;
 }
 
 export interface Task {
-  id: string
-  projectId: string
-  title: string
-  description: string
-  status: "todo" | "in-progress" | "completed"
-  priority: "low" | "medium" | "high"
-  assignedTo?: string
-  dueDate?: string
-  createdAt: string
-  updatedAt: string
+  id: string;
+  projectId: string;
+  title: string;
+  description: string;
+  status: "todo" | "in-progress" | "completed";
+  priority: "low" | "medium" | "high";
+  assignedTo?: string;
+  dueDate?: string;
+  cost?: number;
+  createdAt: string;
+  updatedAt: string;
 }
 
 export interface Notification {
@@ -52,4 +54,16 @@ export interface Notification {
   daysUntilExpiry?: number
   isRead: boolean
   createdAt: string
+}
+
+export interface Payment {
+  id: string;
+  clientId: string;
+  projectId: string;
+  amount: number;
+  paymentDate: string;
+  paymentMethod: "cash" | "mpesa" | "bank_transfer" | "other";
+  notes?: string;
+  createdAt: string;
+  updatedAt: string;
 }
