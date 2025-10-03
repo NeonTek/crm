@@ -1,6 +1,6 @@
 import { NextResponse } from "next/server";
 import connectDB from "@/lib/mongoose";
-import { TestimonialModel } from "@/lib/models";
+import { TestimonialModel, ProjectModel } from "@/lib/models";
 import { getClientById } from "@/lib/data";
 
 export async function POST(req: Request) {
@@ -20,6 +20,12 @@ export async function POST(req: Request) {
       return NextResponse.json({ error: "Client not found" }, { status: 404 });
     }
 
+    // Fetch the project to get its name
+    const project = await ProjectModel.findById(projectId).lean();
+    if (!project) {
+      return NextResponse.json({ error: "Project not found" }, { status: 404 });
+    }
+
     // Check if feedback for this project already exists to prevent duplicates
     const existingFeedback = await TestimonialModel.findOne({
       clientId,
@@ -36,7 +42,7 @@ export async function POST(req: Request) {
       clientId,
       clientName: client.name,
       projectId,
-      projectName: "Project Name", // We'll update this later
+      projectName: project.name,
       rating: Number(rating),
       feedback,
     });
