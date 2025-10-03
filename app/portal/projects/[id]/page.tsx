@@ -113,14 +113,14 @@ export default function ProjectDetailsPage({
 
       <Card>
         <CardHeader>
-          {/* --- THIS IS THE RESPONSIVE FIX --- */}
           <div className="flex flex-col sm:flex-row justify-between items-start gap-4">
             <div className="flex-1">
               <CardTitle className="text-2xl">{project.name}</CardTitle>
               <CardDescription>{project.description}</CardDescription>
             </div>
-            <div className="flex flex-col sm:flex-row gap-2 w-full sm:w-auto">
-              <Button asChild variant="outline" className="w-full">
+            {/* --- RESPONSIVE FIX STARTS HERE --- */}
+            <div className="grid grid-cols-1 gap-2 w-full sm:flex sm:w-auto">
+              <Button asChild variant="outline">
                 <Link href={`/portal/projects/${project.id}/timeline`}>
                   <BarChart2 className="h-4 w-4 mr-2" />
                   View Timeline
@@ -132,8 +132,8 @@ export default function ProjectDetailsPage({
                 client={client}
               />
             </div>
+            {/* --- RESPONSIVE FIX ENDS HERE --- */}
           </div>
-          {/* --- END OF FIX --- */}
         </CardHeader>
         <CardContent className="space-y-4">
           <div className="flex flex-wrap items-center gap-x-4 gap-y-2">
