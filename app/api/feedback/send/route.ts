@@ -1,8 +1,7 @@
 import { NextResponse } from "next/server";
 import connectDB from "@/lib/mongoose";
-import { ProjectModel } from "@/lib/models";
-import { getClientById } from "@/lib/data";
-import type { Project } from "@/lib/types";
+import { ProjectModel, ClientModel } from "@/lib/models";
+import type { Project, Client } from "@/lib/types";
 
 export async function POST(req: Request) {
   await connectDB();
@@ -22,12 +21,14 @@ export async function POST(req: Request) {
       return NextResponse.json({ error: "Project not found" }, { status: 404 });
     }
 
-    const client = await getClientById(project.clientId);
+    // Fetch the client directly as a full Mongoose document (no .lean())
+    const client = await ClientModel.findById(project.clientId);
     if (!client) {
       return NextResponse.json({ error: "Client not found" }, { status: 404 });
     }
 
     const baseUrl = process.env.NEXT_PUBLIC_BASE_URL || "http://localhost:3000";
+    // Now, client.id will be correctly populated from the Mongoose document
     const feedbackLink = `${baseUrl}/feedback/${projectId}?clientId=${client.id}`;
 
     const subject = `We'd Love Your Feedback on the "${project.name}" Project!`;
