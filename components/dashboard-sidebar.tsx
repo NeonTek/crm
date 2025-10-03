@@ -20,6 +20,7 @@ import {
   Mail,
   LifeBuoy,
   DollarSign,
+  FileText,
 } from "lucide-react";
 import { useTheme } from "next-themes";
 
@@ -30,6 +31,7 @@ const navigation = [
   { name: "Tasks", href: "/dashboard/tasks", icon: CheckSquare },
   { name: "Notifications", href: "/dashboard/notifications", icon: Bell },
   { name: "Bulk Mail", href: "/dashboard/notifications/bulk", icon: Mail },
+  { name: "Invoices", href: "/dashboard/invoices", icon: FileText },
   {
     name: "Billing",
     href: "/dashboard/billing",

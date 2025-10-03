@@ -229,6 +229,62 @@ const TicketSchema = new Schema<ITicket>(
   }
 );
 
+// ---Invoice Schema ---
+interface ILineItem extends Document {
+  description: string;
+  quantity: number;
+  unitPrice: number;
+  total: number;
+}
+
+const LineItemSchema = new Schema<ILineItem>({
+  description: { type: String, required: true },
+  quantity: { type: Number, required: true, default: 1 },
+  unitPrice: { type: Number, required: true },
+  total: { type: Number, required: true },
+});
+
+interface IInvoice extends Document {
+  clientId: string;
+  projectId: string;
+  invoiceNumber: string;
+  issueDate: string;
+  dueDate: string;
+  lineItems: ILineItem[];
+  totalAmount: number;
+  status: 'draft' | 'sent' | 'paid' | 'overdue';
+  notes?: string;
+}
+
+const InvoiceSchema = new Schema<IInvoice>(
+  {
+    clientId: { type: String, required: true, ref: "Client" },
+    projectId: { type: String, required: true, ref: "Project" },
+    invoiceNumber: { type: String, required: true, unique: true },
+    issueDate: { type: String, required: true },
+    dueDate: { type: String, required: true },
+    lineItems: [LineItemSchema],
+    totalAmount: { type: Number, required: true },
+    status: {
+      type: String,
+      enum: ['draft', 'sent', 'paid', 'overdue'],
+      default: 'draft',
+    },
+    notes: { type: String },
+  },
+  {
+    timestamps: true,
+    toJSON: {
+      transform: (doc, ret) => {
+        ret.id = ret._id.toString();
+        delete ret._id;
+        delete ret.__v;
+        return ret;
+      },
+    },
+  }
+);
+
 // Export models
 export const ClientModel =
   mongoose.models.Client || mongoose.model<IClient>("Client", ClientSchema);
@@ -245,4 +301,7 @@ export const TicketModel =
 
 export const PaymentModel =
   mongoose.models.Payment || mongoose.model<IPayment>("Payment", PaymentSchema);
+
+export const InvoiceModel =
+  mongoose.models.Invoice || mongoose.model<IInvoice>("Invoice", InvoiceSchema);
 

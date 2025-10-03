@@ -67,3 +67,26 @@ export interface Payment {
   createdAt: string;
   updatedAt: string;
 }
+
+// --- Invoice-related Interfaces ---
+export interface LineItem {
+  description: string;
+  quantity: number;
+  unitPrice: number;
+  total: number;
+}
+
+export interface Invoice {
+  id: string;
+  clientId: string;
+  projectId: string;
+  invoiceNumber: string;
+  issueDate: string;
+  dueDate: string;
+  lineItems: LineItem[];
+  totalAmount: number;
+  status: 'draft' | 'sent' | 'paid' | 'overdue';
+  notes?: string;
+  createdAt: string;
+  updatedAt: string;
+}
