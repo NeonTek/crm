@@ -21,6 +21,7 @@ import {
   LifeBuoy,
   DollarSign,
   FileText,
+  Lightbulb,
 } from "lucide-react";
 import { useTheme } from "next-themes";
 
@@ -37,6 +38,7 @@ const navigation = [
     href: "/dashboard/billing",
     icon: DollarSign,
   },
+  { name: "Client Requests", href: "/dashboard/requests", icon: Lightbulb },
   { name: "Support Tickets", href: "/dashboard/tickets", icon: LifeBuoy },
 ];
 

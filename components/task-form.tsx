@@ -1,26 +1,38 @@
-"use client"
+"use client";
 
-import type React from "react"
+import type React from "react";
 
-import { useState, useEffect } from "react"
-import { Button } from "@/components/ui/button"
-import { Input } from "@/components/ui/input"
-import { Label } from "@/components/ui/label"
-import { Textarea } from "@/components/ui/textarea"
-import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select"
-import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card"
-import type { Task, Project, Client } from "@/lib/types"
-import { X } from "lucide-react"
+import { useState, useEffect } from "react";
+import { Button } from "@/components/ui/button";
+import { Input } from "@/components/ui/input";
+import { Label } from "@/components/ui/label";
+import { Textarea } from "@/components/ui/textarea";
+import {
+  Select,
+  SelectContent,
+  SelectItem,
+  SelectTrigger,
+  SelectValue,
+} from "@/components/ui/select";
+import {
+  Card,
+  CardContent,
+  CardDescription,
+  CardHeader,
+  CardTitle,
+} from "@/components/ui/card";
+import type { Task, Project, Client } from "@/lib/types";
+import { X } from "lucide-react";
 
 interface TaskFormProps {
-  task?: Task
-  onSuccess: () => void
-  onCancel: () => void
+  task?: Partial<Task>; // Allow partial task for pre-filling
+  onSuccess: () => void;
+  onCancel: () => void;
 }
 
 export function TaskForm({ task, onSuccess, onCancel }: TaskFormProps) {
-  const [projects, setProjects] = useState<Project[]>([])
-  const [clients, setClients] = useState<Client[]>([])
+  const [projects, setProjects] = useState<Project[]>([]);
+  const [clients, setClients] = useState<Client[]>([]);
   const [formData, setFormData] = useState({
     projectId: task?.projectId || "",
     title: task?.title || "",
@@ -30,86 +42,94 @@ export function TaskForm({ task, onSuccess, onCancel }: TaskFormProps) {
     assignedTo: task?.assignedTo || "",
     startDate: task?.startDate || new Date().toISOString().split("T")[0],
     dueDate: task?.dueDate || "",
-    dueDate: task?.dueDate || "",
   });
 
-  const [isLoading, setIsLoading] = useState(false)
+  const [isLoading, setIsLoading] = useState(false);
 
   useEffect(() => {
     const fetchData = async () => {
       try {
-        const [projectsResponse, clientsResponse] = await Promise.all([fetch("/api/projects"), fetch("/api/clients")])
+        const [projectsResponse, clientsResponse] = await Promise.all([
+          fetch("/api/projects"),
+          fetch("/api/clients"),
+        ]);
 
         if (projectsResponse.ok) {
-          const projectsData = await projectsResponse.json()
-          setProjects(projectsData)
+          const projectsData = await projectsResponse.json();
+          setProjects(projectsData);
         }
 
         if (clientsResponse.ok) {
-          const clientsData = await clientsResponse.json()
-          setClients(clientsData)
+          const clientsData = await clientsResponse.json();
+          setClients(clientsData);
         }
       } catch (error) {
-        console.error("Error fetching data:", error)
+        console.error("Error fetching data:", error);
       }
-    }
-    fetchData()
-  }, [])
+    };
+    fetchData();
+  }, []);
 
   const handleSubmit = async (e: React.FormEvent) => {
-    e.preventDefault()
-    setIsLoading(true)
+    e.preventDefault();
+    setIsLoading(true);
 
     try {
       const taskData = {
         ...formData,
         status: formData.status as Task["status"],
         priority: formData.priority as Task["priority"],
-      }
+      };
 
-      if (task) {
+      // --- THIS IS THE FIX ---
+      // We now check for a valid task.id to determine if it's an update.
+      // If task exists but has no id, it's a new task (from "Convert to Task").
+      if (task && task.id) {
         const response = await fetch(`/api/tasks/${task.id}`, {
           method: "PUT",
           headers: { "Content-Type": "application/json" },
           body: JSON.stringify(taskData),
-        })
-        if (!response.ok) throw new Error("Failed to update task")
+        });
+        if (!response.ok) throw new Error("Failed to update task");
       } else {
         const response = await fetch("/api/tasks", {
           method: "POST",
           headers: { "Content-Type": "application/json" },
           body: JSON.stringify(taskData),
-        })
-        if (!response.ok) throw new Error("Failed to create task")
+        });
+        if (!response.ok) throw new Error("Failed to create task");
       }
+      // --- END OF FIX ---
 
-      if ((window as any).refreshDashboardStats) {
-        ;(window as any).refreshDashboardStats()
-      }
-
-      onSuccess()
+      onSuccess();
     } catch (error) {
-      console.error("Error saving task:", error)
+      console.error("Error saving task:", error);
     } finally {
-      setIsLoading(false)
+      setIsLoading(false);
     }
-  }
+  };
 
   const handleChange = (field: string, value: string) => {
-    setFormData((prev) => ({ ...prev, [field]: value }))
-  }
+    setFormData((prev) => ({ ...prev, [field]: value }));
+  };
 
-  const selectedProject = projects.find((project) => project.id === formData.projectId)
-  const selectedClient = selectedProject ? clients.find((client) => client.id === selectedProject.clientId) : null
+  const selectedProject = projects.find(
+    (project) => project.id === formData.projectId
+  );
+  const selectedClient = selectedProject
+    ? clients.find((client) => client.id === selectedProject.clientId)
+    : null;
 
   return (
     <Card className="w-full max-w-2xl mx-auto">
       <CardHeader>
         <div className="flex items-center justify-between">
           <div>
-            <CardTitle>{task ? "Edit Task" : "Add New Task"}</CardTitle>
+            <CardTitle>
+              {task && task.id ? "Edit Task" : "Add New Task"}
+            </CardTitle>
             <CardDescription>
-              {task
+              {task && task.id
                 ? "Update task information"
                 : "Create a new task for a project"}
             </CardDescription>
@@ -127,6 +147,7 @@ export function TaskForm({ task, onSuccess, onCancel }: TaskFormProps) {
               <Select
                 value={formData.projectId}
                 onValueChange={(value) => handleChange("projectId", value)}
+                required
               >
                 <SelectTrigger>
                   <SelectValue placeholder="Select a project" />
@@ -176,22 +197,24 @@ export function TaskForm({ task, onSuccess, onCancel }: TaskFormProps) {
 
             <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
               <div className="space-y-2">
-                <Label htmlFor="status">Status</Label>
-                <Select
-                  value={formData.status}
-                  onValueChange={(value) => handleChange("status", value)}
-                >
-                  <SelectTrigger>
-                    <SelectValue />
-                  </SelectTrigger>
-                  <SelectContent>
-                    <SelectItem value="todo">To Do</SelectItem>
-                    <SelectItem value="in-progress">In Progress</SelectItem>
-                    <SelectItem value="completed">Completed</SelectItem>
-                  </SelectContent>
-                </Select>
+                <Label htmlFor="startDate">Start Date *</Label>
+                <Input
+                  id="startDate"
+                  type="date"
+                  value={formData.startDate}
+                  onChange={(e) => handleChange("startDate", e.target.value)}
+                  required
+                />
               </div>
-
+              <div className="space-y-2">
+                <Label htmlFor="dueDate">Due Date</Label>
+                <Input
+                  id="dueDate"
+                  type="date"
+                  value={formData.dueDate}
+                  onChange={(e) => handleChange("dueDate", e.target.value)}
+                />
+              </div>
               <div className="space-y-2">
                 <Label htmlFor="priority">Priority</Label>
                 <Select
@@ -208,27 +231,6 @@ export function TaskForm({ task, onSuccess, onCancel }: TaskFormProps) {
                   </SelectContent>
                 </Select>
               </div>
-
-              <div className="space-y-2">
-                <Label htmlFor="startDate">Start Date</Label>
-                <Input
-                  id="startDate"
-                  type="date"
-                  value={formData.startDate}
-                  onChange={(e) => handleChange("startDate", e.target.value)}
-                  required
-                />
-              </div>
-
-              <div className="space-y-2">
-                <Label htmlFor="dueDate">Due Date</Label>
-                <Input
-                  id="dueDate"
-                  type="date"
-                  value={formData.dueDate}
-                  onChange={(e) => handleChange("dueDate", e.target.value)}
-                />
-              </div>
             </div>
 
             <div className="space-y-2">
@@ -237,7 +239,7 @@ export function TaskForm({ task, onSuccess, onCancel }: TaskFormProps) {
                 id="assignedTo"
                 value={formData.assignedTo}
                 onChange={(e) => handleChange("assignedTo", e.target.value)}
-                placeholder="e.g., John Doe, jane@neontek.co.ke"
+                placeholder="e.g., John Doe"
               />
             </div>
           </div>
@@ -247,7 +249,11 @@ export function TaskForm({ task, onSuccess, onCancel }: TaskFormProps) {
               type="submit"
               disabled={isLoading || !formData.projectId || !formData.title}
             >
-              {isLoading ? "Saving..." : task ? "Update Task" : "Create Task"}
+              {isLoading
+                ? "Saving..."
+                : task && task.id
+                ? "Update Task"
+                : "Create Task"}
             </Button>
             <Button type="button" variant="outline" onClick={onCancel}>
               Cancel

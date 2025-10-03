@@ -34,6 +34,14 @@ const ClientSchema = new Schema<IClient>(
   }
 );
 
+interface IClientRequest extends Document {
+  clientId: string;
+  clientName: string;
+  title: string;
+  description: string;
+  status: "new" | "under-review" | "approved" | "declined";
+}
+
 // Project Schema
 interface IProject extends Omit<Project, "id">, Document {
   amountPaid?: number; // Add this
@@ -286,6 +294,31 @@ const InvoiceSchema = new Schema<IInvoice>(
   }
 );
 
+const ClientRequestSchema = new Schema<IClientRequest>(
+  {
+    clientId: { type: String, required: true, ref: "Client" },
+    clientName: { type: String, required: true },
+    title: { type: String, required: true },
+    description: { type: String, required: true },
+    status: {
+      type: String,
+      enum: ["new", "under-review", "approved", "declined"],
+      default: "new",
+    },
+  },
+  {
+    timestamps: true,
+    toJSON: {
+      transform: (doc, ret) => {
+        ret.id = ret._id.toString();
+        delete ret._id;
+        delete ret.__v;
+        return ret;
+      },
+    },
+  }
+);
+
 // Export models
 export const ClientModel =
   mongoose.models.Client || mongoose.model<IClient>("Client", ClientSchema);
@@ -305,4 +338,9 @@ export const PaymentModel =
 
 export const InvoiceModel =
   mongoose.models.Invoice || mongoose.model<IInvoice>("Invoice", InvoiceSchema);
+
+export const ClientRequestModel =
+  mongoose.models.ClientRequest ||
+  mongoose.model<IClientRequest>("ClientRequest", ClientRequestSchema);
+
 

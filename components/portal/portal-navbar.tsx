@@ -20,7 +20,7 @@ const navigation = [
   { name: "Dashboard", href: "/portal/dashboard" },
   { name: "Billing", href: "/portal/billing" },
   { name: "Support Tickets", href: "/portal/tickets" },
-  { name: "Notifications", href: "/portal/notifications" },
+  { name: "Ideas & Requests", href: "/portal/requests" },
 ];
 
 export function PortalNavbar() {

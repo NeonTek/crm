@@ -91,3 +91,14 @@ export interface Invoice {
   createdAt: string;
   updatedAt: string;
 }
+
+export interface ClientRequest {
+  id: string;
+  clientId: string;
+  clientName: string;
+  title: string;
+  description: string;
+  status: "new" | "under-review" | "approved" | "declined";
+  createdAt: string;
+  updatedAt: string;
+}
