@@ -29,6 +29,7 @@ import {
   DollarSign,
   AlertTriangle,
   LifeBuoy,
+  ArrowRight,
 } from "lucide-react";
 import Link from "next/link";
 
@@ -121,7 +122,6 @@ export default function ClientDashboardPage() {
 
   return (
     <div className="min-h-screen bg-muted/40">
-
       <main className="grid flex-1 items-start gap-8 p-4 sm:px-6 sm:py-4 md:grid-cols-3">
         {/* Left Column for Services */}
         <div className="md:col-span-1 space-y-6">
@@ -269,9 +269,22 @@ export default function ClientDashboardPage() {
                     </div>
                   </AccordionTrigger>
                   <AccordionContent className="p-4 bg-background rounded-b-md">
-                    <p className="text-muted-foreground mb-4">
-                      {project.description}
-                    </p>
+                    <div className="flex flex-col gap-4">
+                      <p className="text-muted-foreground">
+                        {project.description}
+                      </p>
+                      <Button
+                        asChild
+                        variant="outline"
+                        size="sm"
+                        className="w-fit"
+                      >
+                        <Link href={`/portal/projects/${project.id}`}>
+                          View Details
+                          <ArrowRight className="h-4 w-4 ml-2" />
+                        </Link>
+                      </Button>
+                    </div>
                   </AccordionContent>
                 </AccordionItem>
               ))}
