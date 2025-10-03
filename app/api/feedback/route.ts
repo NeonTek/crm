@@ -20,8 +20,7 @@ export async function POST(req: Request) {
       return NextResponse.json({ error: "Client not found" }, { status: 404 });
     }
 
-    // Fetch the project to get its name
-    const project = await ProjectModel.findById(projectId).lean();
+    const project = await ProjectModel.findById(projectId);
     if (!project) {
       return NextResponse.json({ error: "Project not found" }, { status: 404 });
     }
