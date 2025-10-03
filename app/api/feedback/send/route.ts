@@ -1,7 +1,8 @@
 import { NextResponse } from "next/server";
 import connectDB from "@/lib/mongoose";
-import { ProjectModel, ClientModel } from "@/lib/models";
-import type { Project, Client } from "@/lib/types"; // Import the types
+import { ProjectModel } from "@/lib/models";
+import { getClientById } from "@/lib/data";
+import type { Project } from "@/lib/types";
 
 export async function POST(req: Request) {
   await connectDB();
@@ -21,9 +22,7 @@ export async function POST(req: Request) {
       return NextResponse.json({ error: "Project not found" }, { status: 404 });
     }
 
-    const client = (await ClientModel.findById(
-      project.clientId
-    ).lean()) as Client | null;
+    const client = await getClientById(project.clientId);
     if (!client) {
       return NextResponse.json({ error: "Client not found" }, { status: 404 });
     }
