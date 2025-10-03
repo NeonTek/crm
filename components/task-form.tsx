@@ -28,8 +28,10 @@ export function TaskForm({ task, onSuccess, onCancel }: TaskFormProps) {
     status: task?.status || "todo",
     priority: task?.priority || "medium",
     assignedTo: task?.assignedTo || "",
+    startDate: task?.startDate || new Date().toISOString().split("T")[0],
     dueDate: task?.dueDate || "",
-  })
+    dueDate: task?.dueDate || "",
+  });
 
   const [isLoading, setIsLoading] = useState(false)
 
@@ -106,7 +108,11 @@ export function TaskForm({ task, onSuccess, onCancel }: TaskFormProps) {
         <div className="flex items-center justify-between">
           <div>
             <CardTitle>{task ? "Edit Task" : "Add New Task"}</CardTitle>
-            <CardDescription>{task ? "Update task information" : "Create a new task for a project"}</CardDescription>
+            <CardDescription>
+              {task
+                ? "Update task information"
+                : "Create a new task for a project"}
+            </CardDescription>
           </div>
           <Button variant="ghost" size="sm" onClick={onCancel}>
             <X className="h-4 w-4" />
@@ -118,24 +124,30 @@ export function TaskForm({ task, onSuccess, onCancel }: TaskFormProps) {
           <div className="space-y-4">
             <div className="space-y-2">
               <Label htmlFor="projectId">Project *</Label>
-              <Select value={formData.projectId} onValueChange={(value) => handleChange("projectId", value)}>
+              <Select
+                value={formData.projectId}
+                onValueChange={(value) => handleChange("projectId", value)}
+              >
                 <SelectTrigger>
                   <SelectValue placeholder="Select a project" />
                 </SelectTrigger>
                 <SelectContent>
                   {projects.map((project) => {
-                    const client = clients.find((c) => c.id === project.clientId)
+                    const client = clients.find(
+                      (c) => c.id === project.clientId
+                    );
                     return (
                       <SelectItem key={project.id} value={project.id}>
                         {project.name} - {client?.name || "Unknown Client"}
                       </SelectItem>
-                    )
+                    );
                   })}
                 </SelectContent>
               </Select>
               {selectedProject && selectedClient && (
                 <p className="text-sm text-muted-foreground">
-                  Client: {selectedClient.name} | Status: {selectedProject.status}
+                  Client: {selectedClient.name} | Status:{" "}
+                  {selectedProject.status}
                 </p>
               )}
             </div>
@@ -165,7 +177,10 @@ export function TaskForm({ task, onSuccess, onCancel }: TaskFormProps) {
             <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
               <div className="space-y-2">
                 <Label htmlFor="status">Status</Label>
-                <Select value={formData.status} onValueChange={(value) => handleChange("status", value)}>
+                <Select
+                  value={formData.status}
+                  onValueChange={(value) => handleChange("status", value)}
+                >
                   <SelectTrigger>
                     <SelectValue />
                   </SelectTrigger>
@@ -179,7 +194,10 @@ export function TaskForm({ task, onSuccess, onCancel }: TaskFormProps) {
 
               <div className="space-y-2">
                 <Label htmlFor="priority">Priority</Label>
-                <Select value={formData.priority} onValueChange={(value) => handleChange("priority", value)}>
+                <Select
+                  value={formData.priority}
+                  onValueChange={(value) => handleChange("priority", value)}
+                >
                   <SelectTrigger>
                     <SelectValue />
                   </SelectTrigger>
@@ -189,6 +207,17 @@ export function TaskForm({ task, onSuccess, onCancel }: TaskFormProps) {
                     <SelectItem value="high">High</SelectItem>
                   </SelectContent>
                 </Select>
+              </div>
+
+              <div className="space-y-2">
+                <Label htmlFor="startDate">Start Date</Label>
+                <Input
+                  id="startDate"
+                  type="date"
+                  value={formData.startDate}
+                  onChange={(e) => handleChange("startDate", e.target.value)}
+                  required
+                />
               </div>
 
               <div className="space-y-2">
@@ -214,7 +243,10 @@ export function TaskForm({ task, onSuccess, onCancel }: TaskFormProps) {
           </div>
 
           <div className="flex gap-2 pt-4">
-            <Button type="submit" disabled={isLoading || !formData.projectId || !formData.title}>
+            <Button
+              type="submit"
+              disabled={isLoading || !formData.projectId || !formData.title}
+            >
               {isLoading ? "Saving..." : task ? "Update Task" : "Create Task"}
             </Button>
             <Button type="button" variant="outline" onClick={onCancel}>
@@ -224,5 +256,5 @@ export function TaskForm({ task, onSuccess, onCancel }: TaskFormProps) {
         </form>
       </CardContent>
     </Card>
-  )
+  );
 }

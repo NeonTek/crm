@@ -128,6 +128,7 @@ const TaskSchema = new Schema<ITask>(
       default: "medium",
     },
     assignedTo: { type: String },
+    startDate: { type: String, required: true },
     dueDate: { type: String },
     cost: { type: Number, default: 0 },
   },

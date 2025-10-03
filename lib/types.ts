@@ -39,6 +39,7 @@ export interface Task {
   status: "todo" | "in-progress" | "completed";
   priority: "low" | "medium" | "high";
   assignedTo?: string;
+  startDate?: string;
   dueDate?: string;
   cost?: number;
   createdAt: string;

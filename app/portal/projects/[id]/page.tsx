@@ -18,12 +18,16 @@ import {
   CheckCircle,
   ListTodo,
   Clock,
+  BarChart2,
 } from "lucide-react";
-import type { Project, Task } from "@/lib/types";
+import type { Client, Project, Task } from "@/lib/types";
+import { Button } from "@/components/ui/button";
+import { ProjectReportGenerator } from "@/components/portal/project-report-generator";
 
 interface ProjectDetailsData {
   project: Project;
   tasks: Task[];
+  client: Client;
 }
 
 export default function ProjectDetailsPage({
@@ -39,7 +43,18 @@ export default function ProjectDetailsPage({
       try {
         const res = await fetch(`/api/portal/projects/${params.id}`);
         if (res.ok) {
-          setData(await res.json());
+          const projectData = await res.json();
+          const clientRes = await fetch(
+            `/api/clients/${projectData.project.clientId}`
+          );
+          if (clientRes.ok) {
+            const clientData = await clientRes.json();
+            setData({
+              project: projectData.project,
+              tasks: projectData.tasks,
+              client: clientData,
+            });
+          }
         } else {
           setData(null);
         }
@@ -74,7 +89,7 @@ export default function ProjectDetailsPage({
     );
   }
 
-  const { project, tasks } = data;
+  const { project, tasks, client } = data;
   const completedTasks = tasks.filter((t) => t.status === "completed").length;
   const progress = tasks.length > 0 ? (completedTasks / tasks.length) * 100 : 0;
 
@@ -98,19 +113,43 @@ export default function ProjectDetailsPage({
 
       <Card>
         <CardHeader>
-          <CardTitle className="text-2xl">{project.name}</CardTitle>
-          <CardDescription>{project.description}</CardDescription>
+          {/* --- THIS IS THE RESPONSIVE FIX --- */}
+          <div className="flex flex-col sm:flex-row justify-between items-start gap-4">
+            <div className="flex-1">
+              <CardTitle className="text-2xl">{project.name}</CardTitle>
+              <CardDescription>{project.description}</CardDescription>
+            </div>
+            <div className="flex flex-col sm:flex-row gap-2 w-full sm:w-auto">
+              <Button asChild variant="outline" className="w-full">
+                <Link href={`/portal/projects/${project.id}/timeline`}>
+                  <BarChart2 className="h-4 w-4 mr-2" />
+                  View Timeline
+                </Link>
+              </Button>
+              <ProjectReportGenerator
+                project={project}
+                tasks={tasks}
+                client={client}
+              />
+            </div>
+          </div>
+          {/* --- END OF FIX --- */}
         </CardHeader>
         <CardContent className="space-y-4">
-          <div className="flex items-center gap-2">
-            <Calendar className="h-4 w-4 text-muted-foreground" />
-            <span className="text-sm">
-              Start Date: {new Date(project.startDate).toLocaleDateString()}
-            </span>
-            {project.endDate && (
+          <div className="flex flex-wrap items-center gap-x-4 gap-y-2">
+            <div className="flex items-center gap-2">
+              <Calendar className="h-4 w-4 text-muted-foreground" />
               <span className="text-sm">
-                - End Date: {new Date(project.endDate).toLocaleDateString()}
+                Start Date: {new Date(project.startDate).toLocaleDateString()}
               </span>
+            </div>
+            {project.endDate && (
+              <div className="flex items-center gap-2">
+                <Calendar className="h-4 w-4 text-muted-foreground" />
+                <span className="text-sm">
+                  End Date: {new Date(project.endDate).toLocaleDateString()}
+                </span>
+              </div>
             )}
           </div>
           <div>
@@ -179,7 +218,6 @@ export default function ProjectDetailsPage({
   );
 }
 
-// Add this Label component at the bottom of the file if it's not globally available
 const Label = React.forwardRef<
   React.ElementRef<"label">,
   React.ComponentPropsWithoutRef<"label">
