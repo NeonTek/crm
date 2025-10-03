@@ -102,3 +102,17 @@ export interface ClientRequest {
   createdAt: string;
   updatedAt: string;
 }
+
+export interface Testimonial {
+  id: string;
+  clientId: string;
+  clientName: string;
+  projectId: string;
+  projectName: string;
+  rating: number;
+  feedback?: string;
+  testimonial?: string;
+  isPublic: boolean;
+  createdAt: string;
+  updatedAt: string;
+}

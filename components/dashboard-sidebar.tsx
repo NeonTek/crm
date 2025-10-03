@@ -22,6 +22,7 @@ import {
   DollarSign,
   FileText,
   Lightbulb,
+  Star,
 } from "lucide-react";
 import { useTheme } from "next-themes";
 
@@ -40,6 +41,7 @@ const navigation = [
   },
   { name: "Client Requests", href: "/dashboard/requests", icon: Lightbulb },
   { name: "Support Tickets", href: "/dashboard/tickets", icon: LifeBuoy },
+  { name: "Testimonials", href: "/dashboard/testimonials", icon: Star },
 ];
 
 export function DashboardSidebar({ className }: { className?: string }) {

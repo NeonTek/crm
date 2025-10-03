@@ -2,7 +2,19 @@ import mongoose, { Schema, type Document } from "mongoose";
 import type { Client, Project, Task, Notification } from "./types";
 
 // Client Schema
-interface IClient extends Omit<Client, "id">, Document {}
+interface IClient extends Omit<Client, "id">, Document { }
+
+
+interface ITestimonial extends Document {
+  clientId: string;
+  clientName: string;
+  projectId: string;
+  projectName: string;
+  rating: number;
+  feedback?: string;
+  testimonial?: string;
+  isPublic: boolean;
+}
 
 const ClientSchema = new Schema<IClient>(
   {
@@ -238,6 +250,30 @@ const TicketSchema = new Schema<ITicket>(
   }
 );
 
+const TestimonialSchema = new Schema<ITestimonial>(
+  {
+    clientId: { type: String, required: true, ref: "Client" },
+    clientName: { type: String, required: true },
+    projectId: { type: String, required: true, ref: "Project" },
+    projectName: { type: String, required: true },
+    rating: { type: Number, required: true, min: 1, max: 5 },
+    feedback: { type: String },
+    testimonial: { type: String },
+    isPublic: { type: Boolean, default: false },
+  },
+  {
+    timestamps: true,
+    toJSON: {
+      transform: (doc, ret) => {
+        ret.id = ret._id.toString();
+        delete ret._id;
+        delete ret.__v;
+        return ret;
+      },
+    },
+  }
+);
+
 // ---Invoice Schema ---
 interface ILineItem extends Document {
   description: string;
@@ -342,5 +378,10 @@ export const InvoiceModel =
 export const ClientRequestModel =
   mongoose.models.ClientRequest ||
   mongoose.model<IClientRequest>("ClientRequest", ClientRequestSchema);
+  
+export const TestimonialModel =
+  mongoose.models.Testimonial ||
+  mongoose.model<ITestimonial>("Testimonial", TestimonialSchema);
+
 
 

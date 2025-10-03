@@ -1,6 +1,7 @@
 import { DashboardStats } from "@/components/dashboard-stats"
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card"
 import { Button } from "@/components/ui/button"
+import { ProjectHealthDashboard } from "@/components/project-health-dashboard";
 import Link from "next/link"
 import { Plus, ArrowRight, Building2, FolderOpen, CheckSquare, Bell } from "lucide-react"
 
@@ -20,6 +21,9 @@ export default function DashboardPage() {
 
       {/* Stats Overview */}
       <DashboardStats />
+
+      {/* Project Health Overview */}
+      <ProjectHealthDashboard />
 
       {/* Quick Actions */}
       <div className="grid gap-6 md:grid-cols-2 lg:grid-cols-3">
