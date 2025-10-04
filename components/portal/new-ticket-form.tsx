@@ -1,6 +1,6 @@
 "use client";
 
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Textarea } from "@/components/ui/textarea";
@@ -13,16 +13,54 @@ import {
   CardTitle,
 } from "@/components/ui/card";
 import { useToast } from "@/components/ui/use-toast";
+import Link from "next/link";
+import { BookText } from "lucide-react";
 
 interface NewTicketFormProps {
   onSuccess: () => void;
+}
+
+interface ArticleSuggestion {
+  _id: string;
+  title: string;
+  slug: string;
 }
 
 export function NewTicketForm({ onSuccess }: NewTicketFormProps) {
   const [subject, setSubject] = useState("");
   const [message, setMessage] = useState("");
   const [isLoading, setIsLoading] = useState(false);
+  const [suggestions, setSuggestions] = useState<ArticleSuggestion[]>([]);
+  const [isSearching, setIsSearching] = useState(false);
   const { toast } = useToast();
+
+  // This useEffect hook handles the search as the user types
+  useEffect(() => {
+    // Don't search if the subject is too short
+    if (subject.trim().length < 3) {
+      setSuggestions([]);
+      return;
+    }
+
+    setIsSearching(true);
+    // Debounce the search to avoid too many API calls
+    const searchTimeout = setTimeout(async () => {
+      try {
+        const res = await fetch(
+          `/api/kb/search?q=${encodeURIComponent(subject)}`
+        );
+        if (res.ok) {
+          setSuggestions(await res.json());
+        }
+      } catch (error) {
+        console.error("Failed to fetch suggestions", error);
+      } finally {
+        setIsSearching(false);
+      }
+    }, 500); // Wait 500ms after user stops typing
+
+    return () => clearTimeout(searchTimeout);
+  }, [subject]);
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
@@ -76,6 +114,33 @@ export function NewTicketForm({ onSuccess }: NewTicketFormProps) {
               required
             />
           </div>
+
+          {/* --- SMART DEFLECTION UI --- */}
+          {(isSearching || suggestions.length > 0) && (
+            <div className="p-4 bg-muted/50 rounded-lg space-y-2">
+              <h4 className="font-semibold text-sm">Suggested Articles:</h4>
+              {isSearching ? (
+                <p className="text-sm text-muted-foreground">Searching...</p>
+              ) : (
+                <ul className="space-y-1">
+                  {suggestions.map((article) => (
+                    <li key={article._id}>
+                      <Link
+                        href={`/help/${article.slug}`}
+                        target="_blank"
+                        className="flex items-center gap-2 text-sm text-primary hover:underline"
+                      >
+                        <BookText className="h-4 w-4" />
+                        {article.title}
+                      </Link>
+                    </li>
+                  ))}
+                </ul>
+              )}
+            </div>
+          )}
+          {/* --- END OF SMART DEFLECTION UI --- */}
+
           <div className="space-y-2">
             <Label htmlFor="message">How can we help?</Label>
             <Textarea

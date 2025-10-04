@@ -16,6 +16,25 @@ interface ITestimonial extends Document {
   isPublic: boolean;
 }
 
+interface IKnowledgeBaseArticle extends Document {
+  title: string;
+  slug: string;
+  content: string;
+  status: "draft" | "published";
+  tags: string[];
+}
+
+export interface KnowledgeBaseArticle {
+  id: string;
+  title: string;
+  slug: string;
+  content: string;
+  status: "draft" | "published";
+  tags: string[];
+  createdAt: string;
+  updatedAt: string;
+}
+
 const ClientSchema = new Schema<IClient>(
   {
     name: { type: String, required: true },
@@ -355,6 +374,33 @@ const ClientRequestSchema = new Schema<IClientRequest>(
   }
 );
 
+
+const KnowledgeBaseArticleSchema = new Schema<IKnowledgeBaseArticle>(
+  {
+    title: { type: String, required: true },
+    slug: { type: String, required: true, unique: true },
+    content: { type: String, required: true },
+    status: {
+      type: String,
+      enum: ["draft", "published"],
+      default: "draft",
+    },
+    tags: [{ type: String }],
+  },
+  {
+    timestamps: true,
+    toJSON: {
+      transform: (doc, ret) => {
+        ret.id = ret._id.toString();
+        delete ret._id;
+        delete ret.__v;
+        return ret;
+      },
+    },
+  }
+);
+
+
 // Export models
 export const ClientModel =
   mongoose.models.Client || mongoose.model<IClient>("Client", ClientSchema);
@@ -383,5 +429,14 @@ export const TestimonialModel =
   mongoose.models.Testimonial ||
   mongoose.model<ITestimonial>("Testimonial", TestimonialSchema);
 
+export const KnowledgeBaseArticleModel =
+  mongoose.models.KnowledgeBaseArticle ||
+  mongoose.model<IKnowledgeBaseArticle>(
+    "KnowledgeBaseArticle",
+    KnowledgeBaseArticleSchema
+  );
 
 
+
+
+  

@@ -23,6 +23,7 @@ import {
   FileText,
   Lightbulb,
   Star,
+  BookOpen,
 } from "lucide-react";
 import { useTheme } from "next-themes";
 
@@ -40,6 +41,7 @@ const navigation = [
     icon: DollarSign,
   },
   { name: "Client Requests", href: "/dashboard/requests", icon: Lightbulb },
+  { name: "Knowledge Base", href: "/dashboard/kb", icon: BookOpen },
   { name: "Support Tickets", href: "/dashboard/tickets", icon: LifeBuoy },
   { name: "Testimonials", href: "/dashboard/testimonials", icon: Star },
 ];
