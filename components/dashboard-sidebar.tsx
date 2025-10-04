@@ -24,6 +24,7 @@ import {
   Lightbulb,
   Star,
   BookOpen,
+  CalendarDays,
 } from "lucide-react";
 import { useTheme } from "next-themes";
 
@@ -31,6 +32,7 @@ const navigation = [
   { name: "Dashboard", href: "/dashboard", icon: BarChart3 },
   { name: "Clients", href: "/dashboard/clients", icon: Users },
   { name: "Projects", href: "/dashboard/projects", icon: FolderOpen },
+  { name: "Planner", href: "/dashboard/planner", icon: CalendarDays },
   { name: "Tasks", href: "/dashboard/tasks", icon: CheckSquare },
   { name: "Notifications", href: "/dashboard/notifications", icon: Bell },
   { name: "Bulk Mail", href: "/dashboard/notifications/bulk", icon: Mail },
