@@ -9,8 +9,8 @@ import { Suspense } from "react"
 import "./globals.css"
 
 export const metadata: Metadata = {
-  title: "NeonTek | CRM",
-  description: "Professional CRM system for managing clients, projects, and tasks",
+  title: "NeonTek | CRM - Client Portal",
+  description: "See your",
   icons: {
     icon: "/lamp.png",
   },

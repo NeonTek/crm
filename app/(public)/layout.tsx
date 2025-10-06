@@ -24,6 +24,7 @@ export default function PublicLayout({
           </div>
         </div>
       </header>
+      <navbar />
       <main className="flex-1 w-full max-w-7xl mx-auto px-6 py-12">
         {children}
       </main>
