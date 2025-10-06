@@ -10,7 +10,8 @@ import "./globals.css"
 
 export const metadata: Metadata = {
   title: "NeonTek | CRM - Client Portal",
-  description: "See your",
+  description:
+    "Manage clients, hosting, domains, and projects in one powerful CRM.",
   icons: {
     icon: "/lamp.png",
   },
@@ -35,7 +36,8 @@ export const metadata: Metadata = {
   },
   openGraph: {
     title: "NeonTek | CRM",
-    description: "Manage clients, hosting, domains, and projects in one powerful CRM.",
+    description:
+      "Manage clients, hosting, domains, and projects in one powerful CRM.",
     url: "https://crm.neontek.co.ke",
     siteName: "NeonTek CRM",
     images: [
@@ -52,12 +54,13 @@ export const metadata: Metadata = {
   twitter: {
     card: "summary_large_image",
     title: "NeonTek | CRM",
-    description: "Manage clients, hosting, domains, and projects in one powerful CRM.",
+    description:
+      "Manage clients, hosting, domains, and projects in one powerful CRM.",
     images: ["/lamp.png"],
     creator: "@neontek",
   },
   themeColor: "#00BFFF",
-}
+};
 
 export default function RootLayout({
   children,
