@@ -72,7 +72,6 @@ export function DashboardSidebar({ className }: { className?: string }) {
             alt="NeonTek Logo"
             width={120}
             height={40}
-            className="dark:invert"
           />
         </Link>
       </div>
